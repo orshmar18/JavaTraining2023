@@ -5,23 +5,25 @@ public class ShiftMultiplyEncryption implements EncryptionAlgorithm{
 
 
     @Override
-    public String dataEncryption(byte[] filedata, int byteRead, int key) {
-        char[] charArrayPut = new char[byteRead / 2];
+    public byte[] dataEncryption(byte[] filedata, int byteRead, Key key) {
+        byte[] bytesArrayPut = new byte[byteRead];
         for (int i = 0; i < byteRead; i += 2) {
             short value = (short) ((filedata[i] << 8) | (filedata[i + 1] & 0xFF));
-            charArrayPut[i / 2] = (char) (value * key);
+            bytesArrayPut[i+1] = (byte) (value *((SimpleKey)key).getKey());
+            bytesArrayPut[i] = (byte) ((value *((SimpleKey)key).getKey()) >> 8);
         }
-        return new String(charArrayPut);
+        return bytesArrayPut;
     }
 
     @Override
-    public String dataDecryption(byte[] filedata, int byteRead, int key) {
-        char[] charArrayPut = new char[byteRead / 2];
+    public byte[] dataDecryption(byte[] filedata, int byteRead, Key key) {
+        byte[] bytesArrayPut = new byte[byteRead];
         for (int i = 0; i < byteRead; i += 2) {
             short value = (short) ((filedata[i] << 8) | (filedata[i + 1] & 0xFF));
-            charArrayPut[i / 2] = (char) (devideValueKey(value,key));
+            bytesArrayPut[i+1] = (byte) (devideValueKey(value,((SimpleKey)key).getKey()));
+            bytesArrayPut[i] = (byte) ((devideValueKey(value,((SimpleKey)key).getKey())) >> 8);
         }
-        return new String(charArrayPut);
+        return bytesArrayPut;
     }
 
     public short devideValueKey(short value, int key){
@@ -32,9 +34,9 @@ public class ShiftMultiplyEncryption implements EncryptionAlgorithm{
         return (short) (v1 / key);
     }
 
-    @Override
-    public int generateKey(SecureRandom random) {
+    public Key generateKey() {
+        SecureRandom random = new SecureRandom();
         int[] primes = HelpFunctions.AllPrime(LIMIT);
-        return primes[random.nextInt(primes.length)];
+        return new SimpleKey(primes[random.nextInt(primes.length)]);
     }
 }

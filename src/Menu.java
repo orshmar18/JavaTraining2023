@@ -9,12 +9,12 @@ public class Menu {
         char choiceEncryption = HelpFunctions.UserInputChoise();
         Scanner scan = new Scanner(System.in);
         String filePath;
+        String KPath;
         System.out.println("Enter The Path Of The File : ");
         filePath = scan.next();
         File file = new File(filePath);
 
         char chooseTypeOfEncryption = HelpFunctions.UserInputTypeOfEncryption();
-
         FileEncryptor fileEncryptor = new FileEncryptor(HelpFunctions.TypeOfEncryption(chooseTypeOfEncryption));
 
         if (file.exists()){

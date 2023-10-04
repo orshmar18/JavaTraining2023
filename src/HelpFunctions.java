@@ -1,16 +1,18 @@
 import java.io.File;
-import java.security.PublicKey;
 import java.util.Scanner;
 
 public class HelpFunctions {
     static final char ENCRYPTION = 'a';
     static final char DECRYTION = 'b';
-
     static final char UPENCRYPTION = 'c';
-
     static final char MULTIPLYENCRYPTION = 'd';
-
     static final char DOUBLEENCRYPTION = 'e';
+    static final char REPEATENCRYPTION = 'f';
+
+    static final char UPMULTIPLY = '1';
+    static final char MULTIPLYUP = '2';
+    static final char UPUP = '3';
+    static final char MULTIPLYMULTIPLY = '4';
     static Scanner scan = new Scanner(System.in);
 
     public static String getNewName(File file) {
@@ -34,26 +36,74 @@ public class HelpFunctions {
 
     public static char UserInputTypeOfEncryption() {
         char choice = '0';
-        System.out.println("Choose Between :\n" + UPENCRYPTION + ".ShiftUp\n" + MULTIPLYENCRYPTION + ".ShiftMultiply\n" + DOUBLEENCRYPTION + ".DoubleEncryption\n");
-        while (choice != UPENCRYPTION && choice != MULTIPLYENCRYPTION && choice != DOUBLEENCRYPTION) {
+        System.out.println("Choose Between :\n" + UPENCRYPTION + ".ShiftUp\n" + MULTIPLYENCRYPTION + ".ShiftMultiply\n" + DOUBLEENCRYPTION + ".DoubleEncryption\n"+ REPEATENCRYPTION + ".RepeatEncryption\n");
+        while (choice != UPENCRYPTION && choice != MULTIPLYENCRYPTION && choice != DOUBLEENCRYPTION && choice != REPEATENCRYPTION) {
             choice = scan.next().charAt(0);
-            if (choice != UPENCRYPTION && choice != MULTIPLYENCRYPTION && choice != DOUBLEENCRYPTION)
-                System.out.println("You Have To Choose a or b\nPlease Try Again");
+            if (choice != UPENCRYPTION && choice != MULTIPLYENCRYPTION && choice != DOUBLEENCRYPTION && choice != REPEATENCRYPTION)
+                System.out.println("You Have To Choose "+UPENCRYPTION+" or "+MULTIPLYENCRYPTION+" or "+DOUBLEENCRYPTION+" or "+REPEATENCRYPTION+"\nPlease Try Again");
         }
         return choice;
     }
 
     public static EncryptionAlgorithm TypeOfEncryption(char choiceTypeOfEncryption) {
-        if (choiceTypeOfEncryption == 'c') {
-            return (new ShiftUpEncryption());
-        } else {
-            if (choiceTypeOfEncryption == 'd') {
+        switch (choiceTypeOfEncryption){
+            case UPENCRYPTION :
+                return (new ShiftUpEncryption());
+            case MULTIPLYENCRYPTION :
                 return (new ShiftMultiplyEncryption());
-            } else {
-                return (new DoubleEncryption());
+            case DOUBLEENCRYPTION:
+                return TypeOfDoubleEncryption();
+            case REPEATENCRYPTION:
+                return TypeOfRepeatEncryption();
+        }
+        return null;
+    }
+
+    public static EncryptionAlgorithm TypeOfDoubleEncryption(){
+        System.out.println("Choose Between :\n" + UPMULTIPLY + ".ShiftUp And Then ShiftMultiply\n" + MULTIPLYUP + ".ShiftMultiply And Then ShiftUp\n" + UPUP + ".ShiftUp And Then ShiftUp\n"+ MULTIPLYMULTIPLY + ".ShiftMultiply And Then ShiftMultiply\n");
+        char doubleChoice = '0';
+        while (doubleChoice != UPMULTIPLY && doubleChoice != MULTIPLYUP && doubleChoice != UPUP && doubleChoice != MULTIPLYMULTIPLY){
+            doubleChoice = scan.next().charAt(0);
+            switch (doubleChoice){
+                case UPMULTIPLY :
+                    return new DoubleEncryption(new ShiftUpEncryption(),new ShiftMultiplyEncryption());
+                case MULTIPLYUP :
+                    return new DoubleEncryption(new ShiftMultiplyEncryption(),new ShiftUpEncryption());
+                case UPUP :
+                    return new DoubleEncryption(new ShiftUpEncryption(),new ShiftUpEncryption());
+                case MULTIPLYMULTIPLY:
+                    return new DoubleEncryption(new ShiftMultiplyEncryption(),new ShiftMultiplyEncryption());
+                default:
+                    System.out.println("You Have To Choose Between :\n" + UPMULTIPLY + " or " + MULTIPLYUP + " or " + UPUP + " or "+ MULTIPLYMULTIPLY);
             }
         }
+        return null;
     }
+
+
+    public static EncryptionAlgorithm TypeOfRepeatEncryption(){
+        System.out.print("Enter The Number Of Times You Want To Perform This Action : ");
+        int n = scan.nextInt();
+        char repeatChoice = '0';
+        System.out.println("Choose Action To Perform :\n" + UPENCRYPTION + ".ShiftUp\n" + MULTIPLYENCRYPTION + ".ShiftMultiply\n" + DOUBLEENCRYPTION + ".DoubleEncryption\n");
+        while (repeatChoice != UPENCRYPTION && repeatChoice != MULTIPLYENCRYPTION && repeatChoice != DOUBLEENCRYPTION){
+            repeatChoice = scan.next().charAt(0);
+            switch (repeatChoice){
+                case UPENCRYPTION :
+                    return new RepeatEncryption(new ShiftUpEncryption(),n);
+                case MULTIPLYENCRYPTION :
+                    return new RepeatEncryption(new ShiftMultiplyEncryption(),n);
+                case DOUBLEENCRYPTION :
+                    return new RepeatEncryption(TypeOfDoubleEncryption(),n);
+                default:
+                    System.out.println("You Have To Choose "+UPENCRYPTION+" or "+MULTIPLYENCRYPTION+" or "+DOUBLEENCRYPTION+"\nPlease Try Again");
+            }
+        }
+        return null;
+    }
+
+
+
 
     public static int[] AllPrime(int n) {
         boolean[] isPrime = new boolean[n + 1];

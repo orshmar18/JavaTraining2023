@@ -3,29 +3,33 @@ import java.security.SecureRandom;
 public class ShiftUpEncryption implements EncryptionAlgorithm {
     static final int LIMIT = 255;
 
-
-    @Override
-    public String dataEncryption(byte[] filedata, int byteRead, int key) {
-        char[] charArrayPut = new char[byteRead / 2];
-        for (int i = 0; i < byteRead; i += 2) {
-            short value = (short) ((filedata[i] << 8) | (filedata[i + 1] & 0xFF));
-            charArrayPut[i / 2] = (char) (value + key);
-        }
-        return new String(charArrayPut);
+    public ShiftUpEncryption() {
     }
 
     @Override
-    public String dataDecryption(byte[] filedata, int byteRead, int key) {
-        char[] charArrayPut = new char[byteRead / 2];
+    public byte[] dataEncryption(byte[] filedata, int byteRead, Key key) {
+        byte[] bytesArrayPut = new byte[byteRead];
         for (int i = 0; i < byteRead; i += 2) {
             short value = (short) ((filedata[i] << 8) | (filedata[i + 1] & 0xFF));
-            charArrayPut[i / 2] = (char) (value - key);
+            bytesArrayPut[i+1] = (byte) (value +((SimpleKey)key).getKey());
+            bytesArrayPut[i] = (byte) ((value +((SimpleKey)key).getKey()) >> 8);
         }
-        return new String(charArrayPut);
+        return bytesArrayPut;
     }
 
     @Override
-    public int generateKey(SecureRandom random) {
-        return random.nextInt(LIMIT);
+    public byte[] dataDecryption(byte[] filedata, int byteRead, Key key) {
+        byte[] bytesArrayPut = new byte[byteRead];
+        for (int i = 0; i < byteRead; i += 2) {
+            short value = (short) ((filedata[i] << 8) | (filedata[i + 1] & 0xFF));
+            bytesArrayPut[i+1] = (byte) (value - ((SimpleKey)key).getKey());
+            bytesArrayPut[i] = (byte) ((value -((SimpleKey)key).getKey()) >> 8);
+        }
+        return bytesArrayPut;
+    }
+
+    public Key generateKey() {
+        SecureRandom random = new SecureRandom();
+        return new SimpleKey(random.nextInt(LIMIT));
     }
 }

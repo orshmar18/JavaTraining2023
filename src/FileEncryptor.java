@@ -1,24 +1,22 @@
 import java.io.*;
-import java.security.SecureRandom;
+
 
 public class FileEncryptor {
-
+    static final int BUFFER = 500;
     private final EncryptionAlgorithm encryptionAlgorithm;
 
     public FileEncryptor(EncryptionAlgorithm encryptionAlgorithm) {
         this.encryptionAlgorithm = encryptionAlgorithm;
     }
 
-    static final int BUFFER = 500;
+
 
     public void encryptFile(String originalFilePath) {
-        SecureRandom random = new SecureRandom();
-        int randomNumber = encryptionAlgorithm.generateKey(random);
+        Key randomNumber = encryptionAlgorithm.generateKey();
 
         File file = new File(originalFilePath);
         String path = HelpFunctions.getNewName(file);
-        String fileKeyName = path + "_key.txt";
-        File keyFile = KeyHalper.keyFileCreator(fileKeyName,randomNumber);
+        File keyFile = KeyHalper.keyFileCreator(path,randomNumber);
 
         String fileEncryptedName = path + "_encrypted.txt";
         try(FileInputStream fileInputStream = new FileInputStream(originalFilePath);
@@ -28,8 +26,8 @@ public class FileEncryptor {
             while (dataInputStream.available() > 0){
                 byte[] fileData = new byte[BUFFER];
                 int bytesRead = dataInputStream.read(fileData,0,BUFFER);
-                String afterEncrypt = encryptionAlgorithm.dataEncryption(fileData,bytesRead,randomNumber);
-                dataOutputStream.writeChars(afterEncrypt);
+                byte[] bytesEncrypt = encryptionAlgorithm.dataEncryption(fileData,bytesRead,randomNumber);
+                dataOutputStream.write(bytesEncrypt);
             }
         }catch (IOException e){}
         System.out.println("The Encrypted Message Is At : " + fileEncryptedName);
@@ -44,7 +42,21 @@ public class FileEncryptor {
             String path = HelpFunctions.getNewName(encFile);
             String decryptedFileName = path + "_decrypted.txt";
             File decryptedFile = new File(decryptedFileName);
-            int key = KeyHalper.keyFileReader(keyPath);
+            Key key;
+            if ((encryptionAlgorithm.getClass() == RepeatEncryption.class)){
+                if(((RepeatEncryption) encryptionAlgorithm).getEncAlg().getClass() == DoubleEncryption.class) {
+                key = KeyHalper.complexKeyFileReader(keyPath);
+                }else {
+                    key = KeyHalper.simpleKeyFileReader(keyPath);
+                }
+                }else {
+                if (encryptionAlgorithm.getClass() == DoubleEncryption.class) {
+                    key = KeyHalper.complexKeyFileReader(keyPath);
+                } else {
+                    key = KeyHalper.simpleKeyFileReader(keyPath);
+                }
+            }
+
             try(FileInputStream fileInputStream = new FileInputStream(encryptedFilePath);
                 DataInputStream dataInputStream = new DataInputStream(fileInputStream);
                 FileOutputStream fileOutputStream = new FileOutputStream(decryptedFileName);
@@ -52,8 +64,8 @@ public class FileEncryptor {
                 while (dataInputStream.available() > 0){
                     byte[] fileData = new byte[BUFFER];
                     int bytesRead = dataInputStream.read(fileData,0,BUFFER);
-                    String afterDecrypt = encryptionAlgorithm.dataDecryption(fileData,bytesRead,key);
-                    dataOutputStream.writeChars(afterDecrypt);
+                    byte[] bytesDecrypt = encryptionAlgorithm.dataDecryption(fileData,bytesRead,key);
+                    dataOutputStream.write(bytesDecrypt);
                 }
             }catch (IOException e){}
             System.out.println("The Decrypted Message Is At : "+decryptedFile.getPath());
