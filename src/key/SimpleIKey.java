@@ -1,7 +1,9 @@
-public class SimpleKey implements Key{
+package key;
+
+public class SimpleIKey implements IKey {
     protected int key;
 
-    public SimpleKey(int key) {
+    public SimpleIKey(int key) {
         this.key = key;
     }
 
