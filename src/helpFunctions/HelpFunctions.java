@@ -1,5 +1,6 @@
 package helpFunctions;
 
+import key.IKey;
 import typesOfEncryption.*;
 
 import java.io.File;
@@ -66,7 +67,7 @@ public class HelpFunctions {
     public static IEncryptionAlgorithm TypeOfDoubleEncryption() {
         System.out.println("Choose Between :\n" + UPMULTIPLY + ".ShiftUp And Then ShiftMultiply\n" + MULTIPLYUP + ".ShiftMultiply And Then ShiftUp\n" + UPUP + ".ShiftUp And Then ShiftUp\n" + MULTIPLYMULTIPLY + ".ShiftMultiply And Then ShiftMultiply\n");
         char doubleChoice = '0';
-        while (doubleChoice != UPMULTIPLY && doubleChoice != MULTIPLYUP && doubleChoice != UPUP && doubleChoice != MULTIPLYMULTIPLY) {
+        do {
             doubleChoice = scan.next().charAt(0);
             switch (doubleChoice) {
                 case UPMULTIPLY:
@@ -80,7 +81,7 @@ public class HelpFunctions {
                 default:
                     System.out.println("You Have To Choose Between :\n" + UPMULTIPLY + " or " + MULTIPLYUP + " or " + UPUP + " or " + MULTIPLYMULTIPLY);
             }
-        }
+        }while (doubleChoice != UPMULTIPLY && doubleChoice != MULTIPLYUP && doubleChoice != UPUP && doubleChoice != MULTIPLYMULTIPLY);
         return null;
     }
 
@@ -90,7 +91,7 @@ public class HelpFunctions {
         int n = scan.nextInt();
         char repeatChoice = '0';
         System.out.println("Choose Action To Perform :\n" + UPENCRYPTION + ".ShiftUp\n" + MULTIPLYENCRYPTION + ".ShiftMultiply\n" + DOUBLEENCRYPTION + ".DoubleEncryption\n");
-        while (repeatChoice != UPENCRYPTION && repeatChoice != MULTIPLYENCRYPTION && repeatChoice != DOUBLEENCRYPTION) {
+        do {
             repeatChoice = scan.next().charAt(0);
             switch (repeatChoice) {
                 case UPENCRYPTION:
@@ -102,7 +103,7 @@ public class HelpFunctions {
                 default:
                     System.out.println("You Have To Choose " + UPENCRYPTION + " or " + MULTIPLYENCRYPTION + " or " + DOUBLEENCRYPTION + "\nPlease Try Again");
             }
-        }
+        }while (repeatChoice != UPENCRYPTION && repeatChoice != MULTIPLYENCRYPTION && repeatChoice != DOUBLEENCRYPTION);
         return null;
     }
 

@@ -12,29 +12,32 @@ public class ShiftUpIEncryption implements IEncryptionAlgorithm {
     }
 
     @Override
-    public byte[] dataEncryption(byte[] filedata, int byteRead, IKey IKey) {
-        byte[] bytesArrayPut = new byte[byteRead];
-        for (int i = 0; i < byteRead; i += 2) {
-            short value = (short) ((filedata[i] << 8) | (filedata[i + 1] & 0xFF));
-            bytesArrayPut[i + 1] = (byte) (value + ((SimpleIKey) IKey).getKey());
-            bytesArrayPut[i] = (byte) ((value + ((SimpleIKey) IKey).getKey()) >> 8);
-        }
-        return bytesArrayPut;
+    public byte[] dataEncryption(byte[] filedata, int byteRead, IKey key) {
+        return doEncryptionOrDecryption(filedata,byteRead,key,true);
     }
 
     @Override
-    public byte[] dataDecryption(byte[] filedata, int byteRead, IKey IKey) {
-        byte[] bytesArrayPut = new byte[byteRead];
-        for (int i = 0; i < byteRead; i += 2) {
-            short value = (short) ((filedata[i] << 8) | (filedata[i + 1] & 0xFF));
-            bytesArrayPut[i + 1] = (byte) (value - ((SimpleIKey) IKey).getKey());
-            bytesArrayPut[i] = (byte) ((value - ((SimpleIKey) IKey).getKey()) >> 8);
-        }
-        return bytesArrayPut;
+    public byte[] dataDecryption(byte[] filedata, int byteRead, IKey key) {
+        return doEncryptionOrDecryption(filedata,byteRead,key,false);
     }
 
     public IKey generateKey() {
         SecureRandom random = new SecureRandom();
         return new SimpleIKey(random.nextInt(LIMIT));
+    }
+
+    public byte[] doEncryptionOrDecryption(byte[] filedata, int byteRead, IKey key, boolean isEncryption) {
+        byte[] bytesArrayPut = new byte[byteRead];
+        for (int i = 0; i < byteRead; i += 2) {
+            short value = (short) ((filedata[i] << 8) | (filedata[i + 1] & 0xFF));
+            if (isEncryption) {
+                bytesArrayPut[i + 1] = (byte) (value + ((SimpleIKey) key).getKey());
+                bytesArrayPut[i] = (byte) ((value + ((SimpleIKey) key).getKey()) >> 8);
+            } else {
+                bytesArrayPut[i + 1] = (byte) (value - ((SimpleIKey) key).getKey());
+                bytesArrayPut[i] = (byte) ((value - ((SimpleIKey) key).getKey()) >> 8);
+            }
+        }
+        return bytesArrayPut;
     }
 }

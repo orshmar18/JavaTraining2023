@@ -16,27 +16,34 @@ public class RepeatIEncryption implements IEncryptionAlgorithm {
     }
 
     @Override
-    public byte[] dataEncryption(byte[] filedata, int byteRead, IKey IKey) {
-        byte[] result;
-        result = encAlg.dataEncryption(filedata,byteRead, IKey);
-        for (int i = 1 ; i < numberOfRepeats ; i++){
-            result = encAlg.dataEncryption(result,byteRead, IKey);
-        }
-        return result;
+    public byte[] dataEncryption(byte[] filedata, int byteRead, IKey key) {
+        return doEncryptionOrDecryption(filedata,byteRead,key,true);
     }
 
     @Override
-    public byte[] dataDecryption(byte[] filedata, int byteRead, IKey IKey) {
-        byte[] result;
-        result = encAlg.dataDecryption(filedata,byteRead, IKey);
-        for (int i = 1 ; i < numberOfRepeats ; i++){
-            result = encAlg.dataDecryption(result,byteRead, IKey);
-        }
-        return result;
+    public byte[] dataDecryption(byte[] filedata, int byteRead, IKey key) {
+        return doEncryptionOrDecryption(filedata,byteRead,key,false);
     }
 
     @Override
     public IKey generateKey() {
         return encAlg.generateKey();
+    }
+
+
+    public byte[] doEncryptionOrDecryption(byte[] filedata, int byteRead, IKey key, boolean isEncryption) {
+        byte[] result;
+        if (isEncryption) {
+            result = encAlg.dataEncryption(filedata, byteRead, key);
+            for (int i = 1; i < numberOfRepeats; i++) {
+                result = encAlg.dataEncryption(result, byteRead, key);
+            }
+        }else {
+            result = encAlg.dataDecryption(filedata,byteRead, key);
+            for (int i = 1 ; i < numberOfRepeats ; i++){
+                result = encAlg.dataDecryption(result,byteRead, key);
+            }
+        }
+        return result;
     }
 }

@@ -28,4 +28,17 @@ public class ComplexIKey implements IKey {
     public String toString() {
         return Arrays.toString(complexIKey) + "";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ComplexIKey that = (ComplexIKey) o;
+        return Arrays.equals(complexIKey, that.complexIKey);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(complexIKey);
+    }
 }

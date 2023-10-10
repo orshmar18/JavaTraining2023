@@ -1,8 +1,14 @@
 package key;
 
+import typesOfEncryption.DoubleIEncryption;
+import typesOfEncryption.IEncryptionAlgorithm;
+import typesOfEncryption.RepeatIEncryption;
+
 import java.io.*;
 
 public class KeyHelper {
+    static final int FIRST = 0;
+    static final int SECOND = 1;
 
     public static IKey simpleKeyFileReader(String keyPath) {
         SimpleIKey key = new SimpleIKey(0);
@@ -21,8 +27,8 @@ public class KeyHelper {
             String linkKey;
             linkKey = keyReader.readLine();
             String[] parts = linkKey.substring(1, linkKey.length() - 1).split(",");
-            IKey firstIKey = new SimpleIKey(Integer.parseInt(parts[0].trim()));
-            IKey secondIKey = new SimpleIKey(Integer.parseInt(parts[1].trim()));
+            IKey firstIKey = new SimpleIKey(Integer.parseInt(parts[FIRST].trim()));
+            IKey secondIKey = new SimpleIKey(Integer.parseInt(parts[SECOND].trim()));
             key.setComplex(firstIKey, secondIKey);
         } catch (IOException e) {
         }
@@ -37,5 +43,21 @@ public class KeyHelper {
         } catch (IOException e) {
         }
         return keyFile;
+    }
+
+    public static IKey keyFileReaderByType(IEncryptionAlgorithm encryptionType, String keyPath) {
+        if ((encryptionType.getClass() == RepeatIEncryption.class)) {
+            if (((RepeatIEncryption) encryptionType).getEncAlg().getClass() == DoubleIEncryption.class) {
+                return KeyHelper.complexKeyFileReader(keyPath);
+            } else {
+                return KeyHelper.simpleKeyFileReader(keyPath);
+            }
+        } else {
+            if (encryptionType.getClass() == DoubleIEncryption.class) {
+                return KeyHelper.complexKeyFileReader(keyPath);
+            } else {
+                return KeyHelper.simpleKeyFileReader(keyPath);
+            }
+        }
     }
 }

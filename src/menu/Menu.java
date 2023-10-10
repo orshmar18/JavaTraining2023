@@ -9,7 +9,7 @@ public class Menu {
     static final char ENCRYPTION = 'a';
 
     static final char DECRYTION = 'b';
-    public static void Menu(){
+    public static void StartMenu(){
         char choiceEncryption = HelpFunctions.UserInputChoise();
         Scanner scan = new Scanner(System.in);
         String filePath;
@@ -26,7 +26,7 @@ public class Menu {
                 case DECRYTION -> {
                     System.out.print("Please Enter The Key Path : ");
                     String kPath = scan.next();
-                    fileEncryptor.deccryptFile(filePath,kPath);
+                    fileEncryptor.decryptFile(filePath,kPath);
                 }
                 default -> System.out.println("You Did Not Enter One Of The Options");
             }
