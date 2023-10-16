@@ -1,7 +1,8 @@
-package menu;
+package javaa.menu;
 
-import helpFunctions.HelpFunctions;
-import fileEncryptor.FileEncryptor;
+import javaa.fileEncryptor.FileEncryptor;
+import javaa.helpFunctions.HelpFunctions;
+
 import java.io.File;
 import java.util.Scanner;
 

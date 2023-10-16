@@ -1,4 +1,4 @@
-package key;
+package javaa.key;
 
 import java.util.Arrays;
 

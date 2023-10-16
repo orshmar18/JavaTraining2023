@@ -1,8 +1,8 @@
-package key;
+package javaa.key;
 
-import typesOfEncryption.DoubleIEncryption;
-import typesOfEncryption.IEncryptionAlgorithm;
-import typesOfEncryption.RepeatIEncryption;
+import javaa.typesOfEncryption.DoubleIEncryption;
+import javaa.typesOfEncryption.IEncryptionAlgorithm;
+import javaa.typesOfEncryption.RepeatIEncryption;
 
 import java.io.*;
 

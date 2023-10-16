@@ -1,4 +1,4 @@
-package key;
+package javaa.key;
 
 public interface IKey {
 }

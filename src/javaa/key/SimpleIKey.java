@@ -1,4 +1,4 @@
-package key;
+package javaa.key;
 
 public class SimpleIKey implements IKey {
     protected int key;

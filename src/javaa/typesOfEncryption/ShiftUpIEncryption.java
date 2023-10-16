@@ -1,9 +1,10 @@
-package typesOfEncryption;
+package javaa.typesOfEncryption;
 
-import key.IKey;
-import key.SimpleIKey;
+import javaa.key.IKey;
+import javaa.key.SimpleIKey;
 
 import java.security.SecureRandom;
+
 
 public class ShiftUpIEncryption implements IEncryptionAlgorithm {
     static final int LIMIT = 255;

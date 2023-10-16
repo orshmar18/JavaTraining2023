@@ -1,7 +1,8 @@
-package typesOfEncryption;
+package javaa.typesOfEncryption;
 
-import key.ComplexIKey;
-import key.IKey;
+import javaa.key.ComplexIKey;
+import javaa.key.IKey;
+import javaa.key.SimpleIKey;
 
 public class DoubleIEncryption implements IEncryptionAlgorithm {
     private final IEncryptionAlgorithm encAlg1;
@@ -16,12 +17,12 @@ public class DoubleIEncryption implements IEncryptionAlgorithm {
 
     @Override
     public byte[] dataEncryption(byte[] filedata, int byteRead, IKey key) {
-        return doEncryptionOrDecryption(filedata,byteRead,key,true);
+        return doEncryptionOrDecryption(filedata, byteRead, key, true);
     }
 
     @Override
     public byte[] dataDecryption(byte[] filedata, int byteRead, IKey key) {
-        return doEncryptionOrDecryption(filedata,byteRead,key,false);
+        return doEncryptionOrDecryption(filedata, byteRead, key, false);
     }
 
     @Override

@@ -1,7 +1,8 @@
-package helpFunctions;
+package javaa.helpFunctions;
 
-import key.IKey;
-import typesOfEncryption.*;
+import javaa.typesOfEncryption.*;
+
+import javaa.typesOfEncryption.*;
 
 import java.io.File;
 import java.util.Scanner;

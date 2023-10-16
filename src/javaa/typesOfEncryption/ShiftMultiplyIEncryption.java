@@ -1,8 +1,8 @@
-package typesOfEncryption;
+package javaa.typesOfEncryption;
 
-import helpFunctions.HelpFunctions;
-import key.IKey;
-import key.SimpleIKey;
+import javaa.helpFunctions.HelpFunctions;
+import javaa.key.IKey;
+import javaa.key.SimpleIKey;
 
 import java.security.SecureRandom;
 
@@ -19,7 +19,7 @@ public class ShiftMultiplyIEncryption implements IEncryptionAlgorithm {
         return doEncryptionOrDecryption(filedata,byteRead,key,false);
     }
 
-    public short devideValueKey(short value, int key) {//the function finds the common divisor of key and value without remainder and returns it.
+    public short devideValueKey(short value, int key) {//the function finds the common divisor of java.key and value without remainder and returns it.
         int finalvalue = value;
         while (finalvalue % key != 0) {
             finalvalue += 65536;

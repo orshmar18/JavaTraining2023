@@ -1,6 +1,6 @@
-package typesOfEncryption;
+package javaa.typesOfEncryption;
 
-import key.IKey;
+import javaa.key.IKey;
 
 public class RepeatIEncryption implements IEncryptionAlgorithm {
     private final IEncryptionAlgorithm encAlg;

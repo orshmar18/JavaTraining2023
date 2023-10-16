@@ -1,9 +1,9 @@
-package fileEncryptor;
+package javaa.fileEncryptor;
 
-import helpFunctions.HelpFunctions;
-import typesOfEncryption.IEncryptionAlgorithm;
-import key.IKey;
-import key.KeyHelper;
+import javaa.helpFunctions.HelpFunctions;
+import javaa.typesOfEncryption.IEncryptionAlgorithm;
+import javaa.key.IKey;
+import javaa.key.KeyHelper;
 
 import java.io.*;
 

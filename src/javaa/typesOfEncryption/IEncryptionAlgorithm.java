@@ -1,6 +1,6 @@
-package typesOfEncryption;
+package javaa.typesOfEncryption;
 
-import key.IKey;
+import javaa.key.IKey;
 
 public interface IEncryptionAlgorithm {
      byte[] dataEncryption(byte[] filedata, int byteRead, IKey IKey);
