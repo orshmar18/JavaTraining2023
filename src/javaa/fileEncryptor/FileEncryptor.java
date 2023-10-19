@@ -1,6 +1,8 @@
 package javaa.fileEncryptor;
 
+import javaa.exception.InvalidEncryptionKeyException;
 import javaa.helpFunctions.HelpFunctions;
+import javaa.key.SimpleIKey;
 import javaa.typesOfEncryption.IEncryptionAlgorithm;
 import javaa.key.IKey;
 import javaa.key.KeyHelper;
@@ -17,29 +19,35 @@ public class FileEncryptor {
     }
 
     public void encryptFile(String originalFilePath) {
-        IKey randomNumber = encryptionAlgorithm.generateKey();
+        IKey randomNumber = new SimpleIKey(0);
         File file = new File(originalFilePath);
+        try {
+            randomNumber = encryptionAlgorithm.generateKey();
+        } catch (InvalidEncryptionKeyException e) {
+            System.out.println(e);
+        }
         String path = HelpFunctions.getNewName(file);
         File keyFile = KeyHelper.keyFileCreator(path, randomNumber);
+
         String fileEncryptedPath = path + "_encrypted.txt";
-        writeOrReadFromFile(originalFilePath,fileEncryptedPath,randomNumber,true);
+        writeOrReadFromFile(originalFilePath, fileEncryptedPath, randomNumber, true);
         System.out.println("The Encrypted Message Is At : " + fileEncryptedPath);
         System.out.println("The Key Is At : " + keyFile.getPath());
     }
 
 
-    public void decryptFile(String encryptedFilePath, String keyPath) {
-        File keyFile = new File(keyPath);
-        if (keyFile.exists()) {
+    public void decryptFile(String encryptedFilePath, String keyPath) throws InvalidEncryptionKeyException {
+        if (HelpFunctions.isValidPath(keyPath)) {
             File encFile = new File(encryptedFilePath);
             String path = HelpFunctions.getNewName(encFile);
             String decryptedFileName = path + "_decrypted.txt";
             File decryptedFile = new File(decryptedFileName);
             IKey key = KeyHelper.keyFileReaderByType(encryptionAlgorithm, keyPath);
-            writeOrReadFromFile(encryptedFilePath,decryptedFileName,key,false);
+            writeOrReadFromFile(encryptedFilePath, decryptedFileName, key, false);
             System.out.println("The Decrypted Message Is At : " + decryptedFile.getPath());
-        } else
-            System.out.println("File Of Key Not Found");
+        } else {
+            throw new InvalidEncryptionKeyException("The Key Is Not Valid To ShiftUp Encryption");
+        }
     }
 
     public void writeOrReadFromFile(String fileToRead, String fileToWrite, IKey key, boolean isEncryption) {

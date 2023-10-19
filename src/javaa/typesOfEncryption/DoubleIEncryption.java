@@ -1,5 +1,7 @@
 package javaa.typesOfEncryption;
 
+import javaa.comperator.IEncryptionAlgorithmComparator;
+import javaa.exception.InvalidEncryptionKeyException;
 import javaa.key.ComplexIKey;
 import javaa.key.IKey;
 import javaa.key.SimpleIKey;
@@ -9,6 +11,9 @@ public class DoubleIEncryption implements IEncryptionAlgorithm {
     private final IEncryptionAlgorithm encAlg2;
     static final int FIRST = 0;
     static final int SECOND = 1;
+
+    private final ComplexIKey key = new ComplexIKey();
+
 
     public DoubleIEncryption(IEncryptionAlgorithm encAlg1, IEncryptionAlgorithm encAlg2) {
         this.encAlg1 = encAlg1;
@@ -27,9 +32,18 @@ public class DoubleIEncryption implements IEncryptionAlgorithm {
 
     @Override
     public IKey generateKey() {
-        IKey firstEncryptionIKey = encAlg1.generateKey();
-        IKey secondEncryptionIKey = encAlg2.generateKey();
-        return new ComplexIKey(firstEncryptionIKey, secondEncryptionIKey);
+        try {
+            this.key.setComplex(encAlg1.generateKey(), encAlg2.generateKey());
+        } catch (InvalidEncryptionKeyException e) {
+            System.out.println(e);
+        }
+        return new ComplexIKey(this.key.getComplex()[0], this.key.getComplex()[1]);
+    }
+
+    @Override
+    public int getKeyStrength() {
+        IEncryptionAlgorithmComparator comparator = new IEncryptionAlgorithmComparator();
+        return comparator.compare(encAlg1,encAlg2);
     }
 
     public byte[] doEncryptionOrDecryption(byte[] filedata, int byteRead, IKey key, boolean isEncryption) {

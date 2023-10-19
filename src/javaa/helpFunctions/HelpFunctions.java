@@ -5,6 +5,8 @@ import javaa.typesOfEncryption.*;
 import javaa.typesOfEncryption.*;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class HelpFunctions {
@@ -42,7 +44,7 @@ public class HelpFunctions {
 
     public static char UserInputTypeOfEncryption() {
         char choice = '0';
-        System.out.println("Choose Between :\n" + UPENCRYPTION + ".ShiftUp\n" + MULTIPLYENCRYPTION + ".ShiftMultiply\n" + DOUBLEENCRYPTION + ".TypesOfEncryption.DoubleEncryption\n" + REPEATENCRYPTION + ".TypesOfEncryption.RepeatEncryption\n");
+        System.out.println("Choose Between :\n" + UPENCRYPTION + ".ShiftUp\n" + MULTIPLYENCRYPTION + ".ShiftMultiply\n" + DOUBLEENCRYPTION + ".DoubleEncryption\n" + REPEATENCRYPTION + ".RepeatEncryption\n");
         while (choice != UPENCRYPTION && choice != MULTIPLYENCRYPTION && choice != DOUBLEENCRYPTION && choice != REPEATENCRYPTION) {
             choice = scan.next().charAt(0);
             if (choice != UPENCRYPTION && choice != MULTIPLYENCRYPTION && choice != DOUBLEENCRYPTION && choice != REPEATENCRYPTION)
@@ -136,5 +138,10 @@ public class HelpFunctions {
             }
         }
         return primes;
+    }
+
+    public static boolean isValidPath(String path) {
+        Path filePath = Paths.get(path);
+        return filePath.isAbsolute() && filePath.toFile().exists();
     }
 }

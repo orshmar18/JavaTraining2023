@@ -1,5 +1,6 @@
 package javaa.typesOfEncryption;
 
+import javaa.exception.InvalidEncryptionKeyException;
 import javaa.helpFunctions.HelpFunctions;
 import javaa.key.IKey;
 import javaa.key.SimpleIKey;
@@ -7,7 +8,8 @@ import javaa.key.SimpleIKey;
 import java.security.SecureRandom;
 
 public class ShiftMultiplyIEncryption implements IEncryptionAlgorithm {
-    static final int LIMIT = 1000;
+    static final int LIMIT = 255;
+    private final SimpleIKey key = new SimpleIKey(1);
 
     @Override
     public byte[] dataEncryption(byte[] filedata, int byteRead, IKey key) {
@@ -27,10 +29,18 @@ public class ShiftMultiplyIEncryption implements IEncryptionAlgorithm {
         return (short) (finalvalue / key);
     }
 
-    public IKey generateKey() {
+    public IKey generateKey() throws InvalidEncryptionKeyException {
         SecureRandom random = new SecureRandom();
         int[] primes = HelpFunctions.AllPrime(LIMIT);
-        return new SimpleIKey(primes[random.nextInt(primes.length)]);
+        this.key.setKey(primes[random.nextInt(primes.length)]);
+        if(this.key.getKey() < 1 || this.key.getKey() > 255)
+        throw new InvalidEncryptionKeyException("The Key Is Not Valid To ShiftMultiply Encryption");
+        return this.key;
+    }
+
+    @Override
+    public int getKeyStrength() {
+        return 5;
     }
 
     public byte[] doEncryptionOrDecryption(byte[] filedata, int byteRead, IKey key, boolean isEncryption) {

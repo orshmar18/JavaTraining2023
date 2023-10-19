@@ -1,5 +1,6 @@
 package javaa.typesOfEncryption;
 
+import javaa.exception.InvalidEncryptionKeyException;
 import javaa.key.IKey;
 
 public class RepeatIEncryption implements IEncryptionAlgorithm {
@@ -26,8 +27,13 @@ public class RepeatIEncryption implements IEncryptionAlgorithm {
     }
 
     @Override
-    public IKey generateKey() {
+    public IKey generateKey() throws InvalidEncryptionKeyException {
         return encAlg.generateKey();
+    }
+
+    @Override
+    public int getKeyStrength() {
+        return encAlg.getKeyStrength();
     }
 
 
