@@ -19,21 +19,23 @@ public class Menu {
         String filePath;
         System.out.println("Enter The Path Of The File : ");
         filePath = scan.next();
-        if (!HelpFunctions.isValidPath(filePath)) {
-            throw new InvalidPathException("The Path Of The Key is not Valid");
-        }
         char chooseTypeOfEncryption = HelpFunctions.UserInputTypeOfEncryption();
         FileEncryptor fileEncryptor = new FileEncryptor(HelpFunctions.TypeOfEncryption(chooseTypeOfEncryption));
         switch (choiceEncryption) {
             case ENCRYPTION -> {
-                fileEncryptor.encryptFile(filePath);
+                try {
+                    fileEncryptor.encryptFile(filePath);
+                } catch (InvalidPathException e) {
+                    System.out.println(e.getMessage());
+                }
+
             }
             case DECRYTION -> {
                 System.out.print("Please Enter The Key Path : ");
                 String keyPath = scan.next();
                 try {
                     fileEncryptor.decryptFile(filePath, keyPath);
-                }catch (InvalidEncryptionKeyException e) {
+                } catch (InvalidPathException | InvalidEncryptionKeyException e){
                     System.out.println(e.getMessage());
                 }
             }

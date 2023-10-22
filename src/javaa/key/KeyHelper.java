@@ -1,5 +1,6 @@
 package javaa.key;
 
+import javaa.exception.InvalidEncryptionKeyException;
 import javaa.typesOfEncryption.DoubleIEncryption;
 import javaa.typesOfEncryption.IEncryptionAlgorithm;
 import javaa.typesOfEncryption.RepeatIEncryption;
@@ -48,19 +49,24 @@ public class KeyHelper {
         return keyFile;
     }
 
-    public static IKey keyFileReaderByType(IEncryptionAlgorithm encryptionType, String keyPath) {
-        if ((encryptionType.getClass() == RepeatIEncryption.class)) {
-            if (((RepeatIEncryption) encryptionType).getEncAlg().getClass() == DoubleIEncryption.class) {
-                return KeyHelper.complexKeyFileReader(keyPath);
+    public static IKey keyFileReaderByType(IEncryptionAlgorithm encryptionType, String keyPath) throws InvalidEncryptionKeyException {
+        if(checkIfKeyValid(encryptionType,keyPath)) {
+            if ((encryptionType.getClass() == RepeatIEncryption.class)) {
+                if (((RepeatIEncryption) encryptionType).getEncAlg().getClass() == DoubleIEncryption.class) {
+                    return KeyHelper.complexKeyFileReader(keyPath);
+                } else {
+                    return KeyHelper.simpleKeyFileReader(keyPath);
+                }
             } else {
-                return KeyHelper.simpleKeyFileReader(keyPath);
+                if (encryptionType.getClass() == DoubleIEncryption.class) {
+                    return KeyHelper.complexKeyFileReader(keyPath);
+                } else {
+                    return KeyHelper.simpleKeyFileReader(keyPath);
+                }
             }
-        } else {
-            if (encryptionType.getClass() == DoubleIEncryption.class) {
-                return KeyHelper.complexKeyFileReader(keyPath);
-            } else {
-                return KeyHelper.simpleKeyFileReader(keyPath);
-            }
+        }
+        else{
+            throw new InvalidEncryptionKeyException("The Value Of The Key Is Not Valid");
         }
     }
 
@@ -77,8 +83,12 @@ public class KeyHelper {
                     ComplexIKey keys = (ComplexIKey) complexKeyFileReader(keyPath);
                     return checkRangeDouble(encAlg, keys);
                 } else {
-                    if (encAlg.getClass().equals(RepeatIEncryption.class))
+                    if (((RepeatIEncryption) encAlg).getEncAlg().getClass() == DoubleIEncryption.class)
                         return checkRangeRepeat(encAlg, complexKeyFileReader(keyPath));
+                    else{
+                        if (((RepeatIEncryption) encAlg).getEncAlg().getClass() == ShiftUpIEncryption.class || ((RepeatIEncryption) encAlg).getEncAlg().getClass() == ShiftMultiplyIEncryption.class)
+                        return checkRangeRepeat(encAlg, simpleKeyFileReader(keyPath));
+                    }
                 }
             }
         }

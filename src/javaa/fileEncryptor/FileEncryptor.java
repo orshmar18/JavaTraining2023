@@ -1,6 +1,7 @@
 package javaa.fileEncryptor;
 
 import javaa.exception.InvalidEncryptionKeyException;
+import javaa.exception.InvalidPathException;
 import javaa.helpFunctions.HelpFunctions;
 import javaa.key.SimpleIKey;
 import javaa.typesOfEncryption.IEncryptionAlgorithm;
@@ -18,7 +19,10 @@ public class FileEncryptor {
         this.encryptionAlgorithm = IEncryptionAlgorithm;
     }
 
-    public void encryptFile(String originalFilePath) {
+    public void encryptFile(String originalFilePath) throws InvalidPathException {
+        if (!HelpFunctions.isValidPath(originalFilePath)) {
+            throw new InvalidPathException("The Path is not Valid");
+        }
         IKey randomNumber = new SimpleIKey(0);
         File file = new File(originalFilePath);
         try {
@@ -36,8 +40,8 @@ public class FileEncryptor {
     }
 
 
-    public void decryptFile(String encryptedFilePath, String keyPath) throws InvalidEncryptionKeyException {
-        if (KeyHelper.checkIfKeyValid(encryptionAlgorithm,keyPath) && HelpFunctions.isValidPath(keyPath)) {
+    public void decryptFile(String encryptedFilePath, String keyPath) throws InvalidPathException, InvalidEncryptionKeyException {
+        if (HelpFunctions.isValidPath(keyPath)) {
             File encFile = new File(encryptedFilePath);
             String path = HelpFunctions.getNewName(encFile);
             String decryptedFileName = path + "_decrypted.txt";
@@ -46,7 +50,7 @@ public class FileEncryptor {
             writeOrReadFromFile(encryptedFilePath, decryptedFileName, key, false);
             System.out.println("The Decrypted Message Is At : " + decryptedFile.getPath());
         } else {
-            throw new InvalidEncryptionKeyException("The Key Is Not Valid To ShiftUp Encryption");
+            throw new InvalidPathException("The Path Of The Key Is Not Valid");
         }
     }
 

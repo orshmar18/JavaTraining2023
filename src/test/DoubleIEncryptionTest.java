@@ -36,7 +36,6 @@ public class DoubleIEncryptionTest {
                 {new ShiftUpIEncryption(), new ShiftUpIEncryption(), new byte[]{116, -69, 115, -54}, new ComplexIKey(new SimpleIKey(20), new SimpleIKey(66))},
                 {new ShiftMultiplyIEncryption(), new ShiftMultiplyIEncryption(), new byte[]{-66, 71, 103, -68}, new ComplexIKey(new SimpleIKey(7), new SimpleIKey(557))},
         });
-
     }
 
     @Test
