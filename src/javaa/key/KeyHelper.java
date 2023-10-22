@@ -78,7 +78,7 @@ public class KeyHelper {
                     return checkRangeDouble(encAlg, keys);
                 } else {
                     if (encAlg.getClass().equals(RepeatIEncryption.class))
-                       return checkRangeRepeat(encAlg,complexKeyFileReader(keyPath));
+                        return checkRangeRepeat(encAlg, complexKeyFileReader(keyPath));
                 }
             }
         }
@@ -123,7 +123,7 @@ public class KeyHelper {
     }
 
     public static boolean checkRangeRepeat(IEncryptionAlgorithm encAlg, IKey key) {
-        if (encAlg.getClass().equals(RepeatIEncryption.class) {
+        if (encAlg.getClass().equals(RepeatIEncryption.class)) {
             if (((RepeatIEncryption) encAlg).getEncAlg().getClass() == DoubleIEncryption.class) {
                 return checkRangeDouble(encAlg, (ComplexIKey) key);
             } else {
