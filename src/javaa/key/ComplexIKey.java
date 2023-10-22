@@ -18,6 +18,12 @@ public class ComplexIKey implements IKey {
     public IKey[] getComplex() {
         return complexIKey;
     }
+    public SimpleIKey getFirst(){
+        return (SimpleIKey) this.complexIKey[0];
+    }
+    public SimpleIKey getSecond(){
+        return (SimpleIKey) this.complexIKey[0];
+    }
 
     public void setComplex(IKey firstIKey, IKey secondIKey) {
         this.complexIKey[0] = firstIKey;

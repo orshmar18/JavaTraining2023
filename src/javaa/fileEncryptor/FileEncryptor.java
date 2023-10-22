@@ -37,7 +37,7 @@ public class FileEncryptor {
 
 
     public void decryptFile(String encryptedFilePath, String keyPath) throws InvalidEncryptionKeyException {
-        if (HelpFunctions.isValidPath(keyPath)) {
+        if (KeyHelper.checkIfKeyValid(encryptionAlgorithm,keyPath) && HelpFunctions.isValidPath(keyPath)) {
             File encFile = new File(encryptedFilePath);
             String path = HelpFunctions.getNewName(encFile);
             String decryptedFileName = path + "_decrypted.txt";
