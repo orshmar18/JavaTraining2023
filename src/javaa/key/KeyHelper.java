@@ -67,7 +67,7 @@ public class KeyHelper {
     public static boolean checkIfKeyValid(IEncryptionAlgorithm encAlg, String keyPath) {
         if (encAlg.getClass().equals(ShiftUpIEncryption.class)) {
             SimpleIKey key = (SimpleIKey) simpleKeyFileReader(keyPath);
-            checkRangeShiftUp(key);
+            return checkRangeShiftUp(key);
         } else {
             if (encAlg.getClass().equals(ShiftMultiplyIEncryption.class)) {
                 SimpleIKey key = (SimpleIKey) simpleKeyFileReader(keyPath);
@@ -86,33 +86,33 @@ public class KeyHelper {
     }
 
     public static boolean checkRangeShiftUp(SimpleIKey key) {
-        if (isDigitInRange(Character.getNumericValue(key.getKey()), 0, 32767))
+        if (isDigitInRange(key.getKey(), 0, 32767))
             return true;
         else
             return false;
     }
 
     public static boolean checkRangeShiftMultiply(SimpleIKey key) {
-        if (isDigitInRange(Character.getNumericValue(key.getKey()), 0, 255))
+        if (isDigitInRange(key.getKey(), 0, 255))
             return true;
         else
             return false;
     }
 
     public static boolean checkRangeDouble(IEncryptionAlgorithm encAlg, ComplexIKey keys) {
-        if (encAlg.getClass().equals(new DoubleIEncryption(new ShiftUpIEncryption(), new ShiftMultiplyIEncryption()))) {
+        if ((((DoubleIEncryption) encAlg).getEncAlg1().getClass() == ShiftUpIEncryption.class) && (((DoubleIEncryption) encAlg).getEncAlg2().getClass() == ShiftMultiplyIEncryption.class)) {
             if (checkRangeShiftUp(keys.getFirst()) && checkRangeShiftMultiply(keys.getSecond()))
                 return true;
         } else {
-            if (encAlg.getClass().equals(new DoubleIEncryption(new ShiftMultiplyIEncryption(), new ShiftUpIEncryption()))) {
+            if ((((DoubleIEncryption) encAlg).getEncAlg1().getClass() == ShiftMultiplyIEncryption.class) && (((DoubleIEncryption) encAlg).getEncAlg2().getClass() == ShiftUpIEncryption.class)) {
                 if (checkRangeShiftMultiply(keys.getFirst()) && checkRangeShiftUp(keys.getSecond()))
                     return true;
             } else {
-                if (encAlg.getClass().equals(new DoubleIEncryption(new ShiftUpIEncryption(), new ShiftUpIEncryption()))) {
+                if ((((DoubleIEncryption) encAlg).getEncAlg1().getClass() == ShiftUpIEncryption.class) && (((DoubleIEncryption) encAlg).getEncAlg2().getClass() == ShiftUpIEncryption.class)) {
                     if (checkRangeShiftUp(keys.getFirst()) && checkRangeShiftUp(keys.getSecond()))
                         return true;
                 } else {
-                    if (encAlg.getClass().equals(new DoubleIEncryption(new ShiftMultiplyIEncryption(), new ShiftMultiplyIEncryption()))) {
+                    if ((((DoubleIEncryption) encAlg).getEncAlg1().getClass() == ShiftMultiplyIEncryption.class) && (((DoubleIEncryption) encAlg).getEncAlg2().getClass() == ShiftMultiplyIEncryption.class)) {
                         if (checkRangeShiftMultiply(keys.getFirst()) && checkRangeShiftMultiply(keys.getSecond()))
                             return true;
                     }
@@ -125,7 +125,7 @@ public class KeyHelper {
     public static boolean checkRangeRepeat(IEncryptionAlgorithm encAlg, IKey key) {
         if (encAlg.getClass().equals(RepeatIEncryption.class)) {
             if (((RepeatIEncryption) encAlg).getEncAlg().getClass() == DoubleIEncryption.class) {
-                return checkRangeDouble(encAlg, (ComplexIKey) key);
+                return checkRangeDouble(((RepeatIEncryption) encAlg).getEncAlg(), (ComplexIKey) key);
             } else {
                 if (((RepeatIEncryption) encAlg).getEncAlg().getClass() == ShiftMultiplyIEncryption.class) {
                     return checkRangeShiftMultiply((SimpleIKey) key);
@@ -139,25 +139,9 @@ public class KeyHelper {
     }
 
 
-    public static char readCharFromFile(String filePath) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            int intValue = reader.read(); // Read the character as an integer
-
-            if (intValue != -1) {
-                return (char) intValue;
-            } else {
-                throw new IOException("End of file reached.");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return 0; // Default value if an error occurs
-        }
-    }
-
     public static boolean isDigitInRange(int key, int min, int max) {
-        if (Character.isDigit(key)) {
-            int intValue = Character.getNumericValue(key);
-            return intValue >= min && key <= max;
+        if (key >= min && key <= max) {
+            return true;
         }
         return false;
     }

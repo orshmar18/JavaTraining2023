@@ -12,10 +12,6 @@ public class RepeatIEncryption implements IEncryptionAlgorithm {
         this.numberOfRepeats = numberOfRepetitions;
     }
 
-//    public IEncryptionAlgorithm getncAlg() {
-//        return numberOfRepeats;
-//    }
-
     public IEncryptionAlgorithm getEncAlg(){
         return encAlg;
     }

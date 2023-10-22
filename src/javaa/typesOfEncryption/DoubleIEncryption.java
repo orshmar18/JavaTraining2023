@@ -14,6 +14,13 @@ public class DoubleIEncryption implements IEncryptionAlgorithm {
 
     private final ComplexIKey key = new ComplexIKey();
 
+    public IEncryptionAlgorithm getEncAlg1() {
+        return encAlg1;
+    }
+
+    public IEncryptionAlgorithm getEncAlg2() {
+        return encAlg2;
+    }
 
     public DoubleIEncryption(IEncryptionAlgorithm encAlg1, IEncryptionAlgorithm encAlg2) {
         this.encAlg1 = encAlg1;
