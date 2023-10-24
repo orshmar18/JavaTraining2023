@@ -57,19 +57,6 @@ public class KeyHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-//        try (BufferedReader keyReader = new BufferedReader(new FileReader(keyPath))) {
-//            String linkKey;
-//            linkKey = keyReader.readLine();
-//            String[] parts = linkKey.substring(1, linkKey.length() - 1).split(",");
-//
-//            IKey firstIKey = new SimpleIKey(Integer.parseInt(parts[FIRST].trim()));
-//            IKey secondIKey = new SimpleIKey(Integer.parseInt(parts[SECOND].trim()));
-//            key.setComplex(firstIKey, secondIKey);
-//        } catch (IOException e) {
-//        }
         return key;
     }
 
