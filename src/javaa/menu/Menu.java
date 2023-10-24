@@ -1,11 +1,11 @@
 package javaa.menu;
 
+import javaa.exception.FileNotExistsException;
 import javaa.exception.InvalidEncryptionKeyException;
-import javaa.exception.InvalidPathException;
+import javaa.exception.InvalidFilePathException;
 import javaa.fileEncryptor.FileEncryptor;
 import javaa.helpFunctions.HelpFunctions;
 
-import java.io.File;
 import java.util.Scanner;
 
 public class Menu {
@@ -13,29 +13,27 @@ public class Menu {
 
     static final char DECRYTION = 'b';
 
-    public static void StartMenu() throws InvalidPathException {
+    public static void StartMenu() throws InvalidFilePathException, FileNotExistsException {
         char choiceEncryption = HelpFunctions.UserInputChoise();
         Scanner scan = new Scanner(System.in);
         String filePath;
-        System.out.println("Enter The Path Of The File : ");
-        filePath = scan.next();
         char chooseTypeOfEncryption = HelpFunctions.UserInputTypeOfEncryption();
         FileEncryptor fileEncryptor = new FileEncryptor(HelpFunctions.TypeOfEncryption(chooseTypeOfEncryption));
+        filePath = HelpFunctions.userInputFilePath();
         switch (choiceEncryption) {
             case ENCRYPTION -> {
                 try {
                     fileEncryptor.encryptFile(filePath);
-                } catch (InvalidPathException e) {
+                } catch (InvalidFilePathException | FileNotExistsException e) {
                     System.out.println(e.getMessage());
                 }
-
             }
             case DECRYTION -> {
                 System.out.print("Please Enter The Key Path : ");
                 String keyPath = scan.next();
                 try {
                     fileEncryptor.decryptFile(filePath, keyPath);
-                } catch (InvalidPathException | InvalidEncryptionKeyException e){
+                } catch (InvalidFilePathException | InvalidEncryptionKeyException | FileNotExistsException e) {
                     System.out.println(e.getMessage());
                 }
             }

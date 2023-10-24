@@ -1,10 +1,13 @@
 package javaa.helpFunctions;
 
+import javaa.exception.FileNotExistsException;
+import javaa.exception.InvalidFilePathException;
 import javaa.typesOfEncryption.*;
 
 import javaa.typesOfEncryption.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -28,6 +31,13 @@ public class HelpFunctions {
         String fileNameWithoutExtension = file.getName().replaceFirst("[.][^.]+$", "");
         return parentDirectory + File.separator + fileNameWithoutExtension;
     }
+    public static String userInputFilePath() throws InvalidFilePathException, FileNotExistsException {
+        String filePath;
+        System.out.println("Enter The Path Of The File : ");
+        filePath = scan.next();
+        return filePath;
+    }
+
 
     public static char UserInputChoise() {
         char choice = '0';
@@ -142,6 +152,10 @@ public class HelpFunctions {
 
     public static boolean isValidPath(String path) {
         Path filePath = Paths.get(path);
-        return filePath.isAbsolute() && filePath.toFile().exists();
+        return filePath.isAbsolute();
+    }
+    public static boolean isFileExists(String path) {
+        Path filePath = Paths.get(path);
+        return filePath.toFile().exists();
     }
 }

@@ -25,11 +25,9 @@ public class ShiftUpIEncryption implements IEncryptionAlgorithm {
         return doEncryptionOrDecryption(filedata,byteRead,key,false);
     }
 
-    public IKey generateKey() throws InvalidEncryptionKeyException {
+    public IKey generateKey() {
         SecureRandom random = new SecureRandom();
         this.key.setKey(random.nextInt(LIMIT));
-        if(this.key.getKey() < 1 || this.key.getKey() > 32767)
-        throw new InvalidEncryptionKeyException("The Key Is Not Valid To ShiftUp Encryption");
         return this.key;
     }
 

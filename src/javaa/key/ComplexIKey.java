@@ -22,7 +22,7 @@ public class ComplexIKey implements IKey {
         return (SimpleIKey) this.complexIKey[0];
     }
     public SimpleIKey getSecond(){
-        return (SimpleIKey) this.complexIKey[0];
+        return (SimpleIKey) this.complexIKey[1];
     }
 
     public void setComplex(IKey firstIKey, IKey secondIKey) {

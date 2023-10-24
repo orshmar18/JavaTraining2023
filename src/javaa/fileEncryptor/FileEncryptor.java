@@ -1,7 +1,8 @@
 package javaa.fileEncryptor;
 
+import javaa.exception.FileNotExistsException;
 import javaa.exception.InvalidEncryptionKeyException;
-import javaa.exception.InvalidPathException;
+import javaa.exception.InvalidFilePathException;
 import javaa.helpFunctions.HelpFunctions;
 import javaa.key.SimpleIKey;
 import javaa.typesOfEncryption.IEncryptionAlgorithm;
@@ -19,20 +20,15 @@ public class FileEncryptor {
         this.encryptionAlgorithm = IEncryptionAlgorithm;
     }
 
-    public void encryptFile(String originalFilePath) throws InvalidPathException {
-        if (!HelpFunctions.isValidPath(originalFilePath)) {
-            throw new InvalidPathException("The Path is not Valid");
-        }
-        IKey randomNumber = new SimpleIKey(0);
+    public void encryptFile(String originalFilePath) throws InvalidFilePathException, FileNotExistsException {
+        if (!HelpFunctions.isValidPath(originalFilePath))
+            throw new InvalidFilePathException("The Path is not Valid");
+        if (!HelpFunctions.isFileExists(originalFilePath))
+            throw new FileNotExistsException("File Not Exists");
         File file = new File(originalFilePath);
-        try {
-            randomNumber = encryptionAlgorithm.generateKey();
-        } catch (InvalidEncryptionKeyException e) {
-            System.out.println(e);
-        }
+        IKey randomNumber = encryptionAlgorithm.generateKey();
         String path = HelpFunctions.getNewName(file);
         File keyFile = KeyHelper.keyFileCreator(path, randomNumber);
-
         String fileEncryptedPath = path + "_encrypted.txt";
         writeOrReadFromFile(originalFilePath, fileEncryptedPath, randomNumber, true);
         System.out.println("The Encrypted Message Is At : " + fileEncryptedPath);
@@ -40,18 +36,24 @@ public class FileEncryptor {
     }
 
 
-    public void decryptFile(String encryptedFilePath, String keyPath) throws InvalidPathException, InvalidEncryptionKeyException {
-        if (HelpFunctions.isValidPath(keyPath)) {
-            File encFile = new File(encryptedFilePath);
-            String path = HelpFunctions.getNewName(encFile);
-            String decryptedFileName = path + "_decrypted.txt";
-            File decryptedFile = new File(decryptedFileName);
-            IKey key = KeyHelper.keyFileReaderByType(encryptionAlgorithm, keyPath);
-            writeOrReadFromFile(encryptedFilePath, decryptedFileName, key, false);
-            System.out.println("The Decrypted Message Is At : " + decryptedFile.getPath());
-        } else {
-            throw new InvalidPathException("The Path Of The Key Is Not Valid");
-        }
+    public void decryptFile(String encryptedFilePath, String keyPath) throws InvalidFilePathException, InvalidEncryptionKeyException, FileNotExistsException {
+        if (!HelpFunctions.isValidPath(encryptedFilePath))
+            throw new InvalidFilePathException("The Path Of The File is not Valid");
+        if (!HelpFunctions.isFileExists(encryptedFilePath))
+            throw new FileNotExistsException("The File Not Exists");
+        if (!HelpFunctions.isValidPath(keyPath))
+            throw new InvalidFilePathException("The Path Of The Key is not Valid");
+        if (!HelpFunctions.isFileExists(keyPath))
+            throw new FileNotExistsException("The File Of The Key Is Not Exists");
+        if (!KeyHelper.checkIfKeyValid(encryptionAlgorithm, keyPath))
+            throw new InvalidEncryptionKeyException("The Value Of The Key Is Not Valid");
+        File encFile = new File(encryptedFilePath);
+        String path = HelpFunctions.getNewName(encFile);
+        String decryptedFileName = path + "_decrypted.txt";
+        File decryptedFile = new File(decryptedFileName);
+        IKey key = KeyHelper.keyFileReaderByType(encryptionAlgorithm, keyPath);
+        writeOrReadFromFile(encryptedFilePath, decryptedFileName, key, false);
+        System.out.println("The Decrypted Message Is At : " + decryptedFile.getPath());
     }
 
     public void writeOrReadFromFile(String fileToRead, String fileToWrite, IKey key, boolean isEncryption) {

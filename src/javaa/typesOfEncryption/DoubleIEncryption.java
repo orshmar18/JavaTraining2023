@@ -39,11 +39,7 @@ public class DoubleIEncryption implements IEncryptionAlgorithm {
 
     @Override
     public IKey generateKey() {
-        try {
             this.key.setComplex(encAlg1.generateKey(), encAlg2.generateKey());
-        } catch (InvalidEncryptionKeyException e) {
-            System.out.println(e);
-        }
         return new ComplexIKey(this.key.getComplex()[0], this.key.getComplex()[1]);
     }
 

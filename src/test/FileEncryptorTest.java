@@ -1,10 +1,9 @@
 package test;
 
+import javaa.exception.FileNotExistsException;
 import javaa.exception.InvalidEncryptionKeyException;
-import javaa.exception.InvalidPathException;
+import javaa.exception.InvalidFilePathException;
 import javaa.fileEncryptor.FileEncryptor;
-import javaa.key.ComplexIKey;
-import javaa.key.SimpleIKey;
 import javaa.typesOfEncryption.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,10 +18,14 @@ public class FileEncryptorTest {
 
     private final FileEncryptor fileEncryptor;
 
-    static final String correctPath = "C:\\try\\or_shmaryahu.txt\n";
-    static final String worngPath = "C:\\try\\or_shmaryahu.txt\n";
-    static final String correctKeyPath = "C:\\try\\or_shmaryahu.txt\n";
-    static final String worngKeyPath = "Worng Path";
+
+    static final String wrongFilePath = "Worng Path";
+    static final String notExistsFilePath = "C:\\try\\orsadasjd";
+
+    static final String correctKeyPath = "C:\\try\\Junit\\Junit_key.txt";
+    static final String correctPath = "C:\\try\\Junit\\Junit.txt";
+    static final String wrongKeyPath = "Worng Path";
+    static final String wrongKeyValue = "C:\\try\\Junit\\Junit_wrong_key.txt";
     static final int numberOfRepeats = 5;
 
     public FileEncryptorTest(IEncryptionAlgorithm encryptionAlgorithm) {
@@ -48,17 +51,35 @@ public class FileEncryptorTest {
 
     }
 
-    @Test
-    public void DecryptionKeyExceptionTest() {
-        assertThrows(InvalidEncryptionKeyException.class, ()->fileEncryptor.decryptFile(correctPath, worngKeyPath));
-    }
 
     @Test
-    public void EncryptWithInvalidPath() {
-        assertThrows(InvalidPathException.class, ()->fileEncryptor.encryptFile(correctPath));
+    public void EncryptWithInvalidPathTest() {
+        assertThrows(InvalidFilePathException.class, ()->fileEncryptor.encryptFile(wrongFilePath));
+    }
+    @Test
+    public void EncryptionWithFileNotExistsTest() {
+        assertThrows(FileNotExistsException.class, ()->fileEncryptor.encryptFile(notExistsFilePath));
     }
 
+
+@Test
+    public void DecryptionFilePathExceptionTest() {
+        assertThrows(InvalidFilePathException.class, ()->fileEncryptor.decryptFile(wrongFilePath, correctKeyPath));
+    }
     @Test
-    public void writeOrReadFromFile() {
+    public void DecryptionFileNotExistsExceptionTest() {
+        assertThrows(FileNotExistsException.class, ()->fileEncryptor.decryptFile(notExistsFilePath, correctKeyPath));
+    }
+    @Test
+    public void DecryptionInvalidKeyPathExceptionTest() {
+        assertThrows(InvalidFilePathException.class, ()->fileEncryptor.decryptFile(correctPath, wrongKeyPath));
+    }
+    @Test
+    public void DecryptionFileOfKeyNotExistsExceptionTest() {
+        assertThrows(FileNotExistsException.class, ()->fileEncryptor.decryptFile(correctPath, notExistsFilePath));
+    }
+    @Test
+    public void DecryptionKeyInvalidExceptionTest() {
+        assertThrows(InvalidEncryptionKeyException.class, ()->fileEncryptor.decryptFile(correctPath, wrongKeyValue));
     }
 }

@@ -27,7 +27,7 @@ public class RepeatIEncryption implements IEncryptionAlgorithm {
     }
 
     @Override
-    public IKey generateKey() throws InvalidEncryptionKeyException {
+    public IKey generateKey() {
         return encAlg.generateKey();
     }
 

@@ -13,12 +13,12 @@ public class ShiftMultiplyIEncryption implements IEncryptionAlgorithm {
 
     @Override
     public byte[] dataEncryption(byte[] filedata, int byteRead, IKey key) {
-        return doEncryptionOrDecryption(filedata,byteRead,key,true);
+        return doEncryptionOrDecryption(filedata, byteRead, key, true);
     }
 
     @Override
     public byte[] dataDecryption(byte[] filedata, int byteRead, IKey key) {
-        return doEncryptionOrDecryption(filedata,byteRead,key,false);
+        return doEncryptionOrDecryption(filedata, byteRead, key, false);
     }
 
     public short devideValueKey(short value, int key) {//the function finds the common divisor of java.key and value without remainder and returns it.
@@ -29,12 +29,10 @@ public class ShiftMultiplyIEncryption implements IEncryptionAlgorithm {
         return (short) (finalvalue / key);
     }
 
-    public IKey generateKey() throws InvalidEncryptionKeyException {
+    public IKey generateKey() {
         SecureRandom random = new SecureRandom();
         int[] primes = HelpFunctions.AllPrime(LIMIT);
         this.key.setKey(primes[random.nextInt(primes.length)]);
-        if(this.key.getKey() < 1 || this.key.getKey() > 255)
-        throw new InvalidEncryptionKeyException("The Key Is Not Valid To ShiftMultiply Encryption");
         return this.key;
     }
 
