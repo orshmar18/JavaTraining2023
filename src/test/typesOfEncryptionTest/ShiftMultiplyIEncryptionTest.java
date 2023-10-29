@@ -1,4 +1,4 @@
-package test;
+package test.typesOfEncryptionTest;
 
 import javaa.key.SimpleIKey;
 import javaa.typesOfEncryption.ShiftMultiplyIEncryption;

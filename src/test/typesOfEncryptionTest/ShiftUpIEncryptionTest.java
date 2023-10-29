@@ -1,4 +1,4 @@
-package test;
+package test.typesOfEncryptionTest;
 
 import static org.junit.Assert.*;
 import javaa.key.*;

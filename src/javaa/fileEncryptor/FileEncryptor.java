@@ -8,6 +8,8 @@ import javaa.key.SimpleIKey;
 import javaa.typesOfEncryption.IEncryptionAlgorithm;
 import javaa.key.IKey;
 import javaa.key.KeyHelper;
+import javaa.typesOfEncryption.ShiftMultiplyIEncryption;
+import javaa.typesOfEncryption.ShiftUpIEncryption;
 
 import java.io.*;
 

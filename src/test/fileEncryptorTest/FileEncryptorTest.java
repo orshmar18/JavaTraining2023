@@ -1,4 +1,4 @@
-package test;
+package test.fileEncryptorTest;
 
 import javaa.exception.FileNotExistsException;
 import javaa.exception.InvalidEncryptionKeyException;

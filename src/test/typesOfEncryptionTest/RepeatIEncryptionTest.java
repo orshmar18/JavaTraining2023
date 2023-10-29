@@ -1,4 +1,4 @@
-package test;
+package test.typesOfEncryptionTest;
 
 import javaa.key.ComplexIKey;
 import javaa.key.IKey;
