@@ -9,6 +9,7 @@ import javaa.menu.Menu;
 public class Main {
     public static void main(String[] args) throws InvalidFilePathException, FileNotExistsException {
         int i = 0;
+        // Why do you limit it by 10? if so, why not using for loop?
         while (i < 10) {
             Menu.StartMenu();
         i++;

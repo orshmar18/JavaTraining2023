@@ -7,7 +7,7 @@ import javaa.key.IKey;
 public class DoubleIEncryption implements IEncryptionAlgorithm {
     private final IEncryptionAlgorithm encAlg1;
     private final IEncryptionAlgorithm encAlg2;
-    static final int FIRST = 0;
+    static final int FIRST = 0; // Why?
     static final int SECOND = 1;
 
     private final ComplexIKey key = new ComplexIKey();
