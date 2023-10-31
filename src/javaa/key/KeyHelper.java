@@ -6,8 +6,6 @@ import javaa.typesOfEncryption.IEncryptionAlgorithm;
 import javaa.typesOfEncryption.RepeatIEncryption;
 import javaa.typesOfEncryption.ShiftUpIEncryption;
 import javaa.typesOfEncryption.ShiftMultiplyIEncryption;
-import javaa.helpFunctions.HelpFunctions;
-
 import java.io.*;
 import java.util.Scanner;
 

@@ -1,6 +1,5 @@
 package javaa.typesOfEncryption;
 
-import javaa.exception.InvalidEncryptionKeyException;
 import javaa.helpFunctions.HelpFunctions;
 import javaa.key.IKey;
 import javaa.key.SimpleIKey;

@@ -1,10 +1,8 @@
 package javaa.typesOfEncryption;
 
 import javaa.comperator.IEncryptionAlgorithmComparator;
-import javaa.exception.InvalidEncryptionKeyException;
 import javaa.key.ComplexIKey;
 import javaa.key.IKey;
-import javaa.key.SimpleIKey;
 
 public class DoubleIEncryption implements IEncryptionAlgorithm {
     private final IEncryptionAlgorithm encAlg1;

@@ -3,11 +3,7 @@ package javaa.helpFunctions;
 import javaa.exception.FileNotExistsException;
 import javaa.exception.InvalidFilePathException;
 import javaa.typesOfEncryption.*;
-
-import javaa.typesOfEncryption.*;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
