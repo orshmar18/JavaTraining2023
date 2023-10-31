@@ -1,0 +1,26 @@
+<Configuration xmlns ="http://logging.apache.org/log4j/2.0/config" status="DEBUG">
+    <Properties>
+        <Property name="APP_LOG_LEVEL">DEBUG</Property>
+    </Properties>
+    <Appenders>
+        <Http name="HttpAppender" url="http://splk-dev-hfd-1b:8088/services/collector/raw" ignoreExceptions="false">
+            <Property name="Authorization" value="Splunk 121b2005-cbc7-45b6-8c01-7522dc63c40b"/>
+            <JSONLayout compact="true" eventEol="true" includeTimeMillis="true" complete="false">
+                <KeyValuePair key="username" value="OrShmaryahu"/>
+            </JSONLayout>
+        </Http>
+        <File name="File" fileName="logs/app.log">
+            <PatternLayout pattern="[FILE] %d{yyyy-MM-dd HH:mm:ss.SSSZ} %p %m%n"/>
+        </File>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+                <PatternLayout pattern="[CONSOLE] %d{yyyy-MM-dd HH:mm:ss.SSSZ} %p %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="HttpAppender"/>
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
