@@ -23,8 +23,16 @@ public class ShiftMultiplyIEncryption implements IEncryptionAlgorithm {
     public short devideValueKey(short value, int key) {//the function finds the common divisor of java.key and value without remainder and returns it.
         int finalvalue = value;
         while (finalvalue % key != 0) {
-            finalvalue += 65536;
+            finalvalue += 65536; // what?
         }
+
+        /*
+         *     for (int divisor = 2; divisor <= Math.sqrt(number); divisor++) {
+        if (number % divisor == 0) {
+            return divisor;
+        }
+    }
+         */
         return (short) (finalvalue / key);
     }
 

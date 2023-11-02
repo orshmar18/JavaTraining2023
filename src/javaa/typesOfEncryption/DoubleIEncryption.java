@@ -5,7 +5,7 @@ import javaa.key.ComplexIKey;
 import javaa.key.IKey;
 
 public class DoubleIEncryption implements IEncryptionAlgorithm {
-    private final IEncryptionAlgorithm encAlg1;
+    private final IEncryptionAlgorithm encAlg1; // meaningfull
     private final IEncryptionAlgorithm encAlg2;
     static final int FIRST = 0; // Why?
     static final int SECOND = 1;
@@ -38,7 +38,7 @@ public class DoubleIEncryption implements IEncryptionAlgorithm {
     @Override
     public IKey generateKey() {
             this.key.setComplex(encAlg1.generateKey(), encAlg2.generateKey());
-        return new ComplexIKey(this.key.getComplex()[0], this.key.getComplex()[1]);
+        return new ComplexIKey(this.key.getComplex()[0], this.key.getComplex()[1]); // Why 2 hops? generate once and send to complex
     }
 
     @Override
@@ -48,9 +48,9 @@ public class DoubleIEncryption implements IEncryptionAlgorithm {
     }
 
     public byte[] doEncryptionOrDecryption(byte[] filedata, int byteRead, IKey key, boolean isEncryption) {
-        IKey[] IKeys = ((ComplexIKey) key).getComplex();
+        IKey[] IKeys = ((ComplexIKey) key).getComplex(); // use you generateKey method
         if (isEncryption) {
-            return encAlg2.dataEncryption(encAlg1.dataEncryption(filedata, byteRead, IKeys[FIRST]), byteRead, IKeys[SECOND]);
+            return encAlg2.dataEncryption(encAlg1.dataEncryption(filedata, byteRead, IKeys[FIRST]), byteRead, IKeys[SECOND]); // Ok, little confusing but could work
         } else {
             return encAlg1.dataDecryption(encAlg2.dataDecryption(filedata, byteRead, IKeys[SECOND]), byteRead, IKeys[FIRST]);
         }
