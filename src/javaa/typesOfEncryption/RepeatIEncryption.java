@@ -1,6 +1,5 @@
 package javaa.typesOfEncryption;
 
-import javaa.exception.InvalidEncryptionKeyException;
 import javaa.key.IKey;
 
 public class RepeatIEncryption implements IEncryptionAlgorithm {
@@ -42,6 +41,7 @@ public class RepeatIEncryption implements IEncryptionAlgorithm {
         if (isEncryption) {
             result = encAlg.dataEncryption(filedata, byteRead, key);
             for (int i = 1; i < numberOfRepeats; i++) {
+                 // you can put the for loop before the first if...
                 result = encAlg.dataEncryption(result, byteRead, key);
             }
         }else {

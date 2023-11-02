@@ -3,11 +3,7 @@ package javaa.helpFunctions;
 import javaa.exception.FileNotExistsException;
 import javaa.exception.InvalidFilePathException;
 import javaa.typesOfEncryption.*;
-
-import javaa.typesOfEncryption.*;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -20,32 +16,35 @@ public class HelpFunctions {
     static final char DOUBLEENCRYPTION = 'e';
     static final char REPEATENCRYPTION = 'f';
 
-    static final char UPMULTIPLY = '1';
+    static final char UPMULTIPLY = '1'; // informative please
     static final char MULTIPLYUP = '2';
     static final char UPUP = '3';
     static final char MULTIPLYMULTIPLY = '4';
     static Scanner scan = new Scanner(System.in);
 
-    public static String getNewName(File file) {
+    public static String getNewName(File file) { // get new name of? change the function name.
         String parentDirectory = file.getParent();
-        String fileNameWithoutExtension = file.getName().replaceFirst("[.][^.]+$", "");
-        return parentDirectory + File.separator + fileNameWithoutExtension;
+        String fileNameWithoutExtension = file.getName().replaceFirst("[.][^.]+$", ""); // is the best way? 
+        // maybe it better to define function calles `removeExtenstions`
+        return parentDirectory + File.separator + fileNameWithoutExtension; // Will it work both in windows and linux? `dir\file` or `dir/file`
     }
+    // whitespace
     public static String userInputFilePath() throws InvalidFilePathException, FileNotExistsException {
         String filePath;
-        System.out.println("Enter The Path Of The File : ");
+        System.out.println("Enter The Path Of The File : "); // check if this file is in file pattern, use ChatGPT, don't overthink
         filePath = scan.next();
         return filePath;
     }
 
 
     public static char UserInputChoise() {
-        char choice = '0';
-        System.out.println("Hello User");
+        char choice = '0'; // what is that?
+        System.out.println("Hello User!");
         System.out.println("Choose Between :\n" + ENCRYPTION + ".Encryption\n" + DECRYPTION + ".Decryption");
         while (choice != ENCRYPTION && choice != DECRYPTION) {
-            choice = scan.next().charAt(0);
-            if (choice != ENCRYPTION && choice != DECRYPTION)
+            choice = scan.next().charAt(0); 
+            if (choice != ENCRYPTION && choice != DECRYPTION) // why do you check the same condition again and again?
+            // if you want to enter the loop first time and them retry - you can use `do .. while`, but I don't think you need it here.
                 System.out.println("You Have To Choose a or b\nPlease Try Again");
         }
         return choice;
@@ -54,6 +53,7 @@ public class HelpFunctions {
 
     public static char UserInputTypeOfEncryption() {
         char choice = '0';
+        // use java built in `"""` char. you can also use printf or any other way to print vars values into the string
         System.out.println("Choose Between :\n" + UPENCRYPTION + ".ShiftUp\n" + MULTIPLYENCRYPTION + ".ShiftMultiply\n" + DOUBLEENCRYPTION + ".DoubleEncryption\n" + REPEATENCRYPTION + ".RepeatEncryption\n");
         while (choice != UPENCRYPTION && choice != MULTIPLYENCRYPTION && choice != DOUBLEENCRYPTION && choice != REPEATENCRYPTION) {
             choice = scan.next().charAt(0);
@@ -66,6 +66,7 @@ public class HelpFunctions {
     public static IEncryptionAlgorithm TypeOfEncryption(char choiceTypeOfEncryption) {
         switch (choiceTypeOfEncryption) {
             case UPENCRYPTION:
+            // no need of ()
                 return (new ShiftUpIEncryption());
             case MULTIPLYENCRYPTION:
                 return (new ShiftMultiplyIEncryption());
