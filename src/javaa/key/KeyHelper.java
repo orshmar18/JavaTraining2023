@@ -1,17 +1,21 @@
 package javaa.key;
 
 import javaa.exception.InvalidEncryptionKeyException;
+import javaa.menu.Menu;
 import javaa.typesOfEncryption.DoubleIEncryption;
 import javaa.typesOfEncryption.IEncryptionAlgorithm;
 import javaa.typesOfEncryption.RepeatIEncryption;
 import javaa.typesOfEncryption.ShiftUpIEncryption;
 import javaa.typesOfEncryption.ShiftMultiplyIEncryption;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.util.Scanner;
 
 public class KeyHelper {
-    static final int FIRST = 0;
-    static final int SECOND = 1;
+    private static final Logger logger = LogManager.getLogger(Menu.class);
+
 
     public static IKey simpleKeyFileReader(String keyPath) throws InvalidEncryptionKeyException {
         SimpleIKey key = new SimpleIKey(0);
@@ -26,6 +30,7 @@ public class KeyHelper {
             }
             scanner.close();
         } catch (FileNotFoundException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
         return key;
@@ -53,6 +58,7 @@ public class KeyHelper {
                 }
             }
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
         return key;
@@ -65,6 +71,7 @@ public class KeyHelper {
             Integer.parseInt(str);
             return true;
         } catch (NumberFormatException e) {
+            logger.error(e.getMessage());
             return false;
         }
     }
@@ -76,6 +83,7 @@ public class KeyHelper {
         try (BufferedWriter keyWriter = new BufferedWriter(new FileWriter(keyFile))) {
             keyWriter.write(IKey.toString());
         } catch (IOException e) {
+            logger.error(e.getMessage());
         }
         return keyFile;
     }

@@ -3,12 +3,16 @@ package javaa.typesOfEncryption;
 import javaa.helpFunctions.HelpFunctions;
 import javaa.key.IKey;
 import javaa.key.SimpleIKey;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.security.SecureRandom;
 
 public class ShiftMultiplyIEncryption implements IEncryptionAlgorithm {
     static final int LIMIT = 255;
     private final SimpleIKey key = new SimpleIKey(1);
+    private static final Logger logger = LogManager.getLogger(ShiftMultiplyIEncryption.class);
+
 
     @Override
     public byte[] dataEncryption(byte[] filedata, int byteRead, IKey key) {
@@ -29,6 +33,7 @@ public class ShiftMultiplyIEncryption implements IEncryptionAlgorithm {
     }
 
     public IKey generateKey() {
+        logger.info("ShiftMultiply Generating Key");
         SecureRandom random = new SecureRandom();
         int[] primes = HelpFunctions.AllPrime(LIMIT);
         this.key.setKey(primes[random.nextInt(primes.length)]);
