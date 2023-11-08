@@ -8,10 +8,6 @@ import javaa.menu.Menu;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) throws InvalidFilePathException, FileNotExistsException {
-        int i = 0;
-        while (i < 10) {
             Menu.StartMenu();
-        i++;
-        }
     }
 }

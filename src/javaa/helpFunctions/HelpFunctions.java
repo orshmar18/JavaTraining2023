@@ -1,20 +1,15 @@
 package javaa.helpFunctions;
 
-import javaa.exception.FileNotExistsException;
-import javaa.exception.InvalidFilePathException;
-import javaa.typesOfEncryption.*;
-
 import javaa.typesOfEncryption.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class HelpFunctions {
-    static final char ENCRYPTION = 'a';
-    static final char DECRYPTION = 'b';
+    static final char ENCRYPTION = 'e';
+    static final char DECRYPTION = 'd';
     static final char UPENCRYPTION = 'c';
     static final char MULTIPLYENCRYPTION = 'd';
     static final char DOUBLEENCRYPTION = 'e';
@@ -26,40 +21,46 @@ public class HelpFunctions {
     static final char MULTIPLYMULTIPLY = '4';
     static Scanner scan = new Scanner(System.in);
 
-    public static String getNewName(File file) {
-        String parentDirectory = file.getParent();
-        String fileNameWithoutExtension = file.getName().replaceFirst("[.][^.]+$", "");
-        return parentDirectory + File.separator + fileNameWithoutExtension;
+    public static String removeFileExtension(String filePath) {
+        File file = new File(filePath);
+        String fileName = file.getName();
+        int lastDotIndex = fileName.lastIndexOf(".");
+
+        if (lastDotIndex != -1) {
+            return filePath.substring(0, filePath.length() - (fileName.length() - lastDotIndex));
+        } else {
+            return filePath;
+        }
     }
-    public static String userInputFilePath() throws InvalidFilePathException, FileNotExistsException {
+
+    public static String userInputFilePath() {
         String filePath;
         System.out.println("Enter The Path Of The File : ");
         filePath = scan.next();
         return filePath;
     }
 
-
-    public static char UserInputChoise() {
-        char choice = '0';
+    public static char UserInputChoice() {
+        char choice;
         System.out.println("Hello User");
         System.out.println("Choose Between :\n" + ENCRYPTION + ".Encryption\n" + DECRYPTION + ".Decryption");
-        while (choice != ENCRYPTION && choice != DECRYPTION) {
+        do {
             choice = scan.next().charAt(0);
             if (choice != ENCRYPTION && choice != DECRYPTION)
-                System.out.println("You Have To Choose a or b\nPlease Try Again");
-        }
+                System.out.println("You Have To Choose " + ENCRYPTION + " or " + DECRYPTION + "\nPlease Try Again");
+        } while (choice != ENCRYPTION && choice != DECRYPTION);
         return choice;
     }
 
 
     public static char UserInputTypeOfEncryption() {
-        char choice = '0';
+        char choice;
         System.out.println("Choose Between :\n" + UPENCRYPTION + ".ShiftUp\n" + MULTIPLYENCRYPTION + ".ShiftMultiply\n" + DOUBLEENCRYPTION + ".DoubleEncryption\n" + REPEATENCRYPTION + ".RepeatEncryption\n");
-        while (choice != UPENCRYPTION && choice != MULTIPLYENCRYPTION && choice != DOUBLEENCRYPTION && choice != REPEATENCRYPTION) {
+        do {
             choice = scan.next().charAt(0);
             if (choice != UPENCRYPTION && choice != MULTIPLYENCRYPTION && choice != DOUBLEENCRYPTION && choice != REPEATENCRYPTION)
                 System.out.println("You Have To Choose " + UPENCRYPTION + " or " + MULTIPLYENCRYPTION + " or " + DOUBLEENCRYPTION + " or " + REPEATENCRYPTION + "\nPlease Try Again");
-        }
+        } while (choice != UPENCRYPTION && choice != MULTIPLYENCRYPTION && choice != DOUBLEENCRYPTION && choice != REPEATENCRYPTION);
         return choice;
     }
 
@@ -94,7 +95,7 @@ public class HelpFunctions {
                 default:
                     System.out.println("You Have To Choose Between :\n" + UPMULTIPLY + " or " + MULTIPLYUP + " or " + UPUP + " or " + MULTIPLYMULTIPLY);
             }
-        }while (doubleChoice != UPMULTIPLY && doubleChoice != MULTIPLYUP && doubleChoice != UPUP && doubleChoice != MULTIPLYMULTIPLY);
+        } while (doubleChoice != UPMULTIPLY && doubleChoice != MULTIPLYUP && doubleChoice != UPUP && doubleChoice != MULTIPLYMULTIPLY);
         return null;
     }
 
@@ -116,7 +117,7 @@ public class HelpFunctions {
                 default:
                     System.out.println("You Have To Choose " + UPENCRYPTION + " or " + MULTIPLYENCRYPTION + " or " + DOUBLEENCRYPTION + "\nPlease Try Again");
             }
-        }while (repeatChoice != UPENCRYPTION && repeatChoice != MULTIPLYENCRYPTION && repeatChoice != DOUBLEENCRYPTION);
+        } while (repeatChoice != UPENCRYPTION && repeatChoice != MULTIPLYENCRYPTION && repeatChoice != DOUBLEENCRYPTION);
         return null;
     }
 
@@ -154,6 +155,7 @@ public class HelpFunctions {
         Path filePath = Paths.get(path);
         return filePath.isAbsolute();
     }
+
     public static boolean isFileExists(String path) {
         Path filePath = Paths.get(path);
         return filePath.toFile().exists();

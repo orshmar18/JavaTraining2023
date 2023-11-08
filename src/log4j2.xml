@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+<!--        <Http name="HttpAppender" url="http://splk-dev-hfd-1b:8088/services/collector/raw" ignoreExceptions="false">-->
+<!--            <Property name="Authorization" value="Splunk 121b2005-cbc7-45b6-8c01-7522dc63c40b"/>-->
+<!--            <JSONLayout compact="true" eventEol="true" includeTimeMillis="true" complete="false">-->
+<!--                <KeyValuePair key="username" value="OrShmaryahu"/>-->
+<!--            </JSONLayout>-->
+<!--        </Http>-->
+        <File name="File" fileName="logs/app.log">-->
+            <PatternLayout pattern="[FILE] %d{yyyy-MM-dd HH:mm:ss.SSSZ} %p %m%n"/>-->
+        </File>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="[CONSOLE] %d{yyyy-MM-dd HH:mm:ss.SSSZ} %p %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="File" />
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+</Configuration>

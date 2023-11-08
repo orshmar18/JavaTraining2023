@@ -1,11 +1,14 @@
 package javaa.typesOfEncryption;
 
-import javaa.exception.InvalidEncryptionKeyException;
 import javaa.key.IKey;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RepeatIEncryption implements IEncryptionAlgorithm {
     private final IEncryptionAlgorithm encAlg;
     private final int numberOfRepeats;
+    private static final Logger logger = LogManager.getLogger(RepeatIEncryption.class);
+
 
     public RepeatIEncryption(IEncryptionAlgorithm encAlg, int numberOfRepetitions) {
         this.encAlg = encAlg;
@@ -28,6 +31,7 @@ public class RepeatIEncryption implements IEncryptionAlgorithm {
 
     @Override
     public IKey generateKey() {
+        logger.info("RepeatEncryption Generating Key");
         return encAlg.generateKey();
     }
 

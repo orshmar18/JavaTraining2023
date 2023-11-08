@@ -4,12 +4,11 @@ import javaa.exception.FileNotExistsException;
 import javaa.exception.InvalidEncryptionKeyException;
 import javaa.exception.InvalidFilePathException;
 import javaa.helpFunctions.HelpFunctions;
-import javaa.key.SimpleIKey;
 import javaa.typesOfEncryption.IEncryptionAlgorithm;
 import javaa.key.IKey;
 import javaa.key.KeyHelper;
-import javaa.typesOfEncryption.ShiftMultiplyIEncryption;
-import javaa.typesOfEncryption.ShiftUpIEncryption;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 
@@ -17,51 +16,45 @@ import java.io.*;
 public class FileEncryptor {
     static final int BUFFER = 500;
     private final IEncryptionAlgorithm encryptionAlgorithm;
+    private static final Logger logger = LogManager.getLogger(FileEncryptor.class);
 
     public FileEncryptor(IEncryptionAlgorithm IEncryptionAlgorithm) {
         this.encryptionAlgorithm = IEncryptionAlgorithm;
     }
 
     public void encryptFile(String originalFilePath) throws InvalidFilePathException, FileNotExistsException {
-        if (!HelpFunctions.isValidPath(originalFilePath))
-            throw new InvalidFilePathException("The Path is not Valid");
-        if (!HelpFunctions.isFileExists(originalFilePath))
-            throw new FileNotExistsException("File Not Exists");
-        File file = new File(originalFilePath);
-        IKey randomNumber = encryptionAlgorithm.generateKey();
-        String path = HelpFunctions.getNewName(file);
-        File keyFile = KeyHelper.keyFileCreator(path, randomNumber);
+        logger.info("Start To Encrypt File");
+        validateFilePath(originalFilePath);
+        //File file = new File(originalFilePath);
+        IKey key = encryptionAlgorithm.generateKey();
+        String path = HelpFunctions.removeFileExtension(originalFilePath);
+        File keyFile = KeyHelper.keyFileCreator(path, key);
         String fileEncryptedPath = path + "_encrypted.txt";
-        writeOrReadFromFile(originalFilePath, fileEncryptedPath, randomNumber, true);
+        doEncryptOrDecrypt(originalFilePath, fileEncryptedPath, key, true);
         System.out.println("The Encrypted Message Is At : " + fileEncryptedPath);
         System.out.println("The Key Is At : " + keyFile.getPath());
+        logger.info("Finish To Encrypt File");
     }
 
-
     public void decryptFile(String encryptedFilePath, String keyPath) throws InvalidFilePathException, InvalidEncryptionKeyException, FileNotExistsException {
-        if (!HelpFunctions.isValidPath(encryptedFilePath))
-            throw new InvalidFilePathException("The Path Of The File is not Valid");
-        if (!HelpFunctions.isFileExists(encryptedFilePath))
-            throw new FileNotExistsException("The File Not Exists");
-        if (!HelpFunctions.isValidPath(keyPath))
-            throw new InvalidFilePathException("The Path Of The Key is not Valid");
-        if (!HelpFunctions.isFileExists(keyPath))
-            throw new FileNotExistsException("The File Of The Key Is Not Exists");
-        if (!KeyHelper.checkIfKeyValid(encryptionAlgorithm, keyPath))
-            throw new InvalidEncryptionKeyException("The Value Of The Key Is Not Valid");
-        File encFile = new File(encryptedFilePath);
-        String path = HelpFunctions.getNewName(encFile);
+        logger.info("Start To Decrypt File");
+        validateFilePath(encryptedFilePath);
+        validateKeyPaths(keyPath,encryptionAlgorithm);
+       // File encryptedFile = new File(encryptedFilePath);
+        String path = HelpFunctions.removeFileExtension(encryptedFilePath);
         String decryptedFileName = path + "_decrypted.txt";
         File decryptedFile = new File(decryptedFileName);
         IKey key = KeyHelper.keyFileReaderByType(encryptionAlgorithm, keyPath);
-        writeOrReadFromFile(encryptedFilePath, decryptedFileName, key, false);
+        doEncryptOrDecrypt(encryptedFilePath, decryptedFileName, key, false);
         System.out.println("The Decrypted Message Is At : " + decryptedFile.getPath());
+        logger.info("Finish To Decrypt File");
     }
 
-    public void writeOrReadFromFile(String fileToRead, String fileToWrite, IKey key, boolean isEncryption) {
-        try (FileInputStream fileInputStream = new FileInputStream(fileToRead);
+
+    public void doEncryptOrDecrypt(String filePathToRead, String filePathToWrite, IKey key, boolean isEncryption) {
+        try (FileInputStream fileInputStream = new FileInputStream(filePathToRead);
              DataInputStream dataInputStream = new DataInputStream(fileInputStream);
-             FileOutputStream fileOutputStream = new FileOutputStream(fileToWrite);
+             FileOutputStream fileOutputStream = new FileOutputStream(filePathToWrite);
              DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream)) {
             while (dataInputStream.available() > 0) {
                 byte[] fileData = new byte[BUFFER];
@@ -75,7 +68,34 @@ public class FileEncryptor {
                 dataOutputStream.write(bytesToWrite);
             }
         } catch (IOException e) {
+            logger.error(e.getMessage());
             System.out.println(e.getMessage());
+        }
+    }
+
+    public void validateFilePath(String encryptedFilePath) throws InvalidFilePathException, FileNotExistsException {
+        validateFilePath(encryptedFilePath, "The Path Of The File is not Valid");
+        validateFileExists(encryptedFilePath, "The File Not Exists");
+    }
+
+    public void validateKeyPaths(String keyPath, IEncryptionAlgorithm encryptionAlgorithm) throws InvalidFilePathException, FileNotExistsException, InvalidEncryptionKeyException {
+        validateFilePath(keyPath, "The Path Of The Key is not Valid");
+        validateFileExists(keyPath, "The File Of The Key Is Not Exists");
+        validateKey(encryptionAlgorithm, keyPath, "The Value Of the Key Is Not Valid");
+    }
+    private void validateFilePath(String path, String errorMessage) throws InvalidFilePathException {
+        if (!HelpFunctions.isValidPath(path)) {
+            throw new InvalidFilePathException(errorMessage);
+        }
+    }
+    private void validateFileExists(String path, String errorMessage) throws FileNotExistsException {
+        if (!HelpFunctions.isFileExists(path)) {
+            throw new FileNotExistsException(errorMessage);
+        }
+    }
+    private void validateKey(IEncryptionAlgorithm encryptionAlgorithm, String keyPath, String errorMessage) throws InvalidEncryptionKeyException {
+        if (!KeyHelper.checkIfKeyValid(encryptionAlgorithm, keyPath)) {
+            throw new InvalidEncryptionKeyException(errorMessage);
         }
     }
 }

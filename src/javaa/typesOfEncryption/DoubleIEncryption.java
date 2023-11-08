@@ -1,10 +1,10 @@
 package javaa.typesOfEncryption;
 
 import javaa.comperator.IEncryptionAlgorithmComparator;
-import javaa.exception.InvalidEncryptionKeyException;
 import javaa.key.ComplexIKey;
 import javaa.key.IKey;
-import javaa.key.SimpleIKey;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DoubleIEncryption implements IEncryptionAlgorithm {
     private final IEncryptionAlgorithm encAlg1;
@@ -13,6 +13,8 @@ public class DoubleIEncryption implements IEncryptionAlgorithm {
     static final int SECOND = 1;
 
     private final ComplexIKey key = new ComplexIKey();
+    private static final Logger logger = LogManager.getLogger(DoubleIEncryption.class);
+
 
     public IEncryptionAlgorithm getEncAlg1() {
         return encAlg1;
@@ -39,7 +41,8 @@ public class DoubleIEncryption implements IEncryptionAlgorithm {
 
     @Override
     public IKey generateKey() {
-            this.key.setComplex(encAlg1.generateKey(), encAlg2.generateKey());
+        logger.info("DoubleEncryption Generating Key");
+        this.key.setComplex(encAlg1.generateKey(), encAlg2.generateKey());
         return new ComplexIKey(this.key.getComplex()[0], this.key.getComplex()[1]);
     }
 

@@ -1,8 +1,10 @@
 package javaa.typesOfEncryption;
 
-import javaa.exception.InvalidEncryptionKeyException;
+import javaa.fileEncryptor.FileEncryptor;
 import javaa.key.IKey;
 import javaa.key.SimpleIKey;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.security.SecureRandom;
 
@@ -10,6 +12,8 @@ import java.security.SecureRandom;
 public class ShiftUpIEncryption implements IEncryptionAlgorithm {
     static final int LIMIT = 32767;
     private final SimpleIKey key = new SimpleIKey(1);
+    private static final Logger logger = LogManager.getLogger(ShiftUpIEncryption.class);
+
 
 
     public ShiftUpIEncryption() {
@@ -26,6 +30,7 @@ public class ShiftUpIEncryption implements IEncryptionAlgorithm {
     }
 
     public IKey generateKey() {
+        logger.info("ShiftUp Generating Key");
         SecureRandom random = new SecureRandom();
         this.key.setKey(random.nextInt(LIMIT));
         return this.key;
