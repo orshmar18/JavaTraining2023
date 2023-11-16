@@ -8,7 +8,7 @@ import org.junit.Test;
 public class ShiftUpIEncryptionTest {
     static final ShiftUpIEncryption shiftUpIEncryption = new ShiftUpIEncryption();
     static final byte[] originalData = {116, 101, 115, 116};
-    static final IKey key = new SimpleIKey(107);
+    static final SimpleIKey key = new SimpleIKey(107);
     static final int byteRead = 4;
     static final byte[] encryptedData = {116, -48, 115, -33};
 

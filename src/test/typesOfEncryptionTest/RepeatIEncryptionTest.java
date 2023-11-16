@@ -12,16 +12,16 @@ import java.util.Collection;
 import static org.junit.Assert.assertArrayEquals;
 
 @RunWith(Parameterized.class)
-public class RepeatIEncryptionTest {
-    private final IEncryptionAlgorithm encAlg;
-    private final IKey key;
+public class RepeatIEncryptionTest<T> {
+    private final IEncryptionAlgorithm<T> encAlg;
+    private final T key;
     private final byte[] encryptedData;
-    RepeatIEncryption repeatIEncryption;
+    RepeatIEncryption<T> repeatIEncryption;
     static final int numberOfRepeats = 5;
     static final byte[] originalData = {116, 101, 115, 116};
     static final int byteRead = 4;
 
-    public RepeatIEncryptionTest(IEncryptionAlgorithm encAlg, byte[] encryptedData, IKey key) {
+    public RepeatIEncryptionTest(IEncryptionAlgorithm<T> encAlg, byte[] encryptedData, T key) {
         this.encAlg = encAlg;
         this.key = key;
         this.encryptedData = encryptedData;

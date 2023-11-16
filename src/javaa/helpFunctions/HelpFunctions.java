@@ -10,10 +10,10 @@ import java.util.Scanner;
 public class HelpFunctions {
     static final char ENCRYPTION = 'e';
     static final char DECRYPTION = 'd';
-    static final char UPENCRYPTION = 'c';
-    static final char MULTIPLYENCRYPTION = 'd';
-    static final char DOUBLEENCRYPTION = 'e';
-    static final char REPEATENCRYPTION = 'f';
+    static final char UPENCRYPTION = 'u';
+    static final char MULTIPLYENCRYPTION = 'm';
+    static final char DOUBLEENCRYPTION = 'd';
+    static final char REPEATENCRYPTION = 'r';
 
     static final char UPMULTIPLY = '1';
     static final char MULTIPLYUP = '2';
@@ -67,9 +67,9 @@ public class HelpFunctions {
     public static IEncryptionAlgorithm TypeOfEncryption(char choiceTypeOfEncryption) {
         switch (choiceTypeOfEncryption) {
             case UPENCRYPTION:
-                return (new ShiftUpIEncryption());
+                return new ShiftUpIEncryption();
             case MULTIPLYENCRYPTION:
-                return (new ShiftMultiplyIEncryption());
+                return new ShiftMultiplyIEncryption();
             case DOUBLEENCRYPTION:
                 return TypeOfDoubleEncryption();
             case REPEATENCRYPTION:
@@ -103,7 +103,7 @@ public class HelpFunctions {
     public static IEncryptionAlgorithm TypeOfRepeatEncryption() {
         System.out.print("Enter The Number Of Times You Want To Perform This Action : ");
         int n = scan.nextInt();
-        char repeatChoice = '0';
+        char repeatChoice ;
         System.out.println("Choose Action To Perform :\n" + UPENCRYPTION + ".ShiftUp\n" + MULTIPLYENCRYPTION + ".ShiftMultiply\n" + DOUBLEENCRYPTION + ".DoubleEncryption\n");
         do {
             repeatChoice = scan.next().charAt(0);

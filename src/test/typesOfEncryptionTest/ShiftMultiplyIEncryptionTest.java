@@ -26,7 +26,7 @@ public class ShiftMultiplyIEncryptionTest {
     public void devideValueKey() {
         short value = 26916;
         int after = 116;
-        int afterDivide = shiftMultiplyIEncryption.devideValueKey(value,key.getKey());
+        int afterDivide = shiftMultiplyIEncryption.devideValueKey(value,(Integer) key.getKey());
         assertEquals(afterDivide,after);
     }
     @Test

@@ -1,17 +1,17 @@
 package javaa.key;
 
-public class SimpleIKey implements IKey {
-    protected int key;
+public class SimpleIKey<T>{
+    protected T key;
 
-    public SimpleIKey(int key) {
+    public SimpleIKey(T key) {
         this.key = key;
     }
 
-    public int getKey() {
+    public T getKey() {
         return key;
     }
 
-    public void setKey(int key) {
+    public void setKey(T key) {
         this.key = key;
     }
 

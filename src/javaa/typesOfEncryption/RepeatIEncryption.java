@@ -4,33 +4,33 @@ import javaa.key.IKey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class RepeatIEncryption implements IEncryptionAlgorithm {
-    private final IEncryptionAlgorithm encAlg;
+public class RepeatIEncryption<T> implements IEncryptionAlgorithm<T> {
+    private final IEncryptionAlgorithm<T> encAlg;
     private final int numberOfRepeats;
     private static final Logger logger = LogManager.getLogger(RepeatIEncryption.class);
 
 
-    public RepeatIEncryption(IEncryptionAlgorithm encAlg, int numberOfRepetitions) {
+    public RepeatIEncryption(IEncryptionAlgorithm<T> encAlg, int numberOfRepetitions) {
         this.encAlg = encAlg;
         this.numberOfRepeats = numberOfRepetitions;
     }
 
-    public IEncryptionAlgorithm getEncAlg(){
+    public IEncryptionAlgorithm<T> getEncAlg(){
         return encAlg;
     }
 
     @Override
-    public byte[] dataEncryption(byte[] filedata, int byteRead, IKey key) {
-        return doEncryptionOrDecryption(filedata,byteRead,key,true);
+    public byte[] dataEncryption(byte[] fileData, int byteRead, T key) {
+        return doEncryptionOrDecryption(fileData,byteRead,key,true);
     }
 
     @Override
-    public byte[] dataDecryption(byte[] filedata, int byteRead, IKey key) {
-        return doEncryptionOrDecryption(filedata,byteRead,key,false);
+    public byte[] dataDecryption(byte[] fileData, int byteRead, T key) {
+        return doEncryptionOrDecryption(fileData,byteRead,key,false);
     }
 
     @Override
-    public IKey generateKey() {
+    public T generateKey() {
         logger.info("RepeatEncryption Generating Key");
         return encAlg.generateKey();
     }
@@ -41,7 +41,7 @@ public class RepeatIEncryption implements IEncryptionAlgorithm {
     }
 
 
-    public byte[] doEncryptionOrDecryption(byte[] filedata, int byteRead, IKey key, boolean isEncryption) {
+    public byte[] doEncryptionOrDecryption(byte[] filedata, int byteRead, T key, boolean isEncryption) {
         byte[] result;
         if (isEncryption) {
             result = encAlg.dataEncryption(filedata, byteRead, key);

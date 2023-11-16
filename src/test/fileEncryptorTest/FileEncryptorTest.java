@@ -19,12 +19,9 @@ public class FileEncryptorTest {
     private final FileEncryptor fileEncryptor;
 
 
-    static final String wrongFilePath = "Worng Path";
+    static final String wrongFilePath = "Wrong Path";
     static final String notExistsFilePath = "C:\\try\\orsadasjd";
-
-    static final String correctKeyPath = "C:\\try\\Junit\\Junit_key.txt";
     static final String correctPath = "C:\\try\\Junit\\Junit.txt";
-    static final String wrongKeyPath = "Worng Path";
     static final String wrongKeyValue = "C:\\try\\Junit\\Junit_wrong_key.txt";
     static final int numberOfRepeats = 5;
 
@@ -64,15 +61,15 @@ public class FileEncryptorTest {
 
 @Test
     public void DecryptionFilePathExceptionTest() {
-        assertThrows(InvalidFilePathException.class, ()->fileEncryptor.decryptFile(wrongFilePath, correctKeyPath));
+        assertThrows(InvalidFilePathException.class, ()->fileEncryptor.decryptFile(wrongFilePath, correctPath));
     }
     @Test
     public void DecryptionFileNotExistsExceptionTest() {
-        assertThrows(FileNotExistsException.class, ()->fileEncryptor.decryptFile(notExistsFilePath, correctKeyPath));
+        assertThrows(FileNotExistsException.class, ()->fileEncryptor.decryptFile(notExistsFilePath, correctPath));
     }
     @Test
     public void DecryptionInvalidKeyPathExceptionTest() {
-        assertThrows(InvalidFilePathException.class, ()->fileEncryptor.decryptFile(correctPath, wrongKeyPath));
+        assertThrows(InvalidFilePathException.class, ()->fileEncryptor.decryptFile(correctPath, wrongFilePath));
     }
     @Test
     public void DecryptionFileOfKeyNotExistsExceptionTest() {

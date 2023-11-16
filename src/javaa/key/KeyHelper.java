@@ -17,8 +17,8 @@ public class KeyHelper {
     private static final Logger logger = LogManager.getLogger(Menu.class);
 
 
-    public static IKey simpleKeyFileReader(String keyPath) throws InvalidEncryptionKeyException {
-        SimpleIKey key = new SimpleIKey(0);
+    public static SimpleIKey<Integer> simpleKeyFileReader(String keyPath) throws InvalidEncryptionKeyException {
+        SimpleIKey<Integer> key = new SimpleIKey<>(0);
         try {
             File file = new File(keyPath);
             Scanner scanner = new Scanner(file);
@@ -36,9 +36,8 @@ public class KeyHelper {
         return key;
     }
 
-    public static IKey complexKeyFileReader(String keyPath) throws InvalidEncryptionKeyException {
-        ComplexIKey key = new ComplexIKey();
-
+    public static ComplexIKey<SimpleIKey<Integer>> complexKeyFileReader(String keyPath) throws InvalidEncryptionKeyException {
+        ComplexIKey<SimpleIKey<Integer>> key = new ComplexIKey<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(keyPath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -46,14 +45,15 @@ public class KeyHelper {
                     // Remove the brackets and split the content by ","
                     String content = line.substring(1, line.length() - 1);
                     String[] numbers = content.split(",");
-                        if (isInteger(numbers[0].trim()) && isInteger(numbers[1].trim())) {
-                            IKey firstIKey = new SimpleIKey(Integer.parseInt(numbers[0].trim()));
-                            IKey secondIKey = new SimpleIKey(Integer.parseInt(numbers[1].trim()));
-                            key.setComplex(firstIKey, secondIKey);
-                            return key;
-                        } else {
-                            throw new InvalidEncryptionKeyException("The Key Is Not Valid");                        }
-                    }else {
+                    if (isInteger(numbers[0].trim()) && isInteger(numbers[1].trim())) {
+                        SimpleIKey<Integer> firstIKey = new SimpleIKey<>(Integer.parseInt(numbers[0].trim()));
+                        SimpleIKey<Integer> secondIKey = new SimpleIKey<>(Integer.parseInt(numbers[1].trim()));
+                        key.setComplex(firstIKey, secondIKey);
+                        return key;
+                    } else {
+                        throw new InvalidEncryptionKeyException("The Key Is Not Valid");
+                    }
+                } else {
                     throw new InvalidEncryptionKeyException("The Key Is Not Valid");
                 }
             }
@@ -63,7 +63,6 @@ public class KeyHelper {
         }
         return key;
     }
-
 
 
     public static boolean isInteger(String str) {
@@ -77,7 +76,7 @@ public class KeyHelper {
     }
 
 
-    public static File keyFileCreator(String path, IKey IKey) {
+    public static <T> File keyFileCreator(String path, T IKey) {
         String fileKeyName = path + "_key.txt";
         File keyFile = new File(fileKeyName);
         try (BufferedWriter keyWriter = new BufferedWriter(new FileWriter(keyFile))) {
@@ -88,24 +87,24 @@ public class KeyHelper {
         return keyFile;
     }
 
-    public static IKey keyFileReaderByType(IEncryptionAlgorithm encryptionType, String keyPath) throws InvalidEncryptionKeyException {
+    public static <T> T keyFileReaderByType(IEncryptionAlgorithm<T> encryptionType, String keyPath) throws InvalidEncryptionKeyException {
         if ((encryptionType.getClass() == RepeatIEncryption.class)) {
             if (((RepeatIEncryption) encryptionType).getEncAlg().getClass() == DoubleIEncryption.class) {
-                return KeyHelper.complexKeyFileReader(keyPath);
+                return (T) KeyHelper.complexKeyFileReader(keyPath);
             } else {
-                return KeyHelper.simpleKeyFileReader(keyPath);
+                return (T) KeyHelper.simpleKeyFileReader(keyPath);
             }
         } else {
             if (encryptionType.getClass() == DoubleIEncryption.class) {
-                return KeyHelper.complexKeyFileReader(keyPath);
+                return (T) KeyHelper.complexKeyFileReader(keyPath);
             } else {
-                return KeyHelper.simpleKeyFileReader(keyPath);
+                return (T) KeyHelper.simpleKeyFileReader(keyPath);
             }
         }
     }
 
 
-    public static boolean checkIfKeyValid(IEncryptionAlgorithm encAlg, String keyPath) throws InvalidEncryptionKeyException {
+    public static <T> boolean checkIfKeyValid(IEncryptionAlgorithm<T> encAlg, String keyPath) throws InvalidEncryptionKeyException {
         if (encAlg.getClass().equals(ShiftUpIEncryption.class)) {
             SimpleIKey key = (SimpleIKey) simpleKeyFileReader(keyPath);
             return checkRangeShiftUp(key);
@@ -119,10 +118,10 @@ public class KeyHelper {
                     return checkRangeDouble(encAlg, keys);
                 } else {
                     if (((RepeatIEncryption) encAlg).getEncAlg().getClass() == DoubleIEncryption.class)
-                        return checkRangeRepeat(encAlg, complexKeyFileReader(keyPath));
+                        return checkRangeRepeat(encAlg, (T)complexKeyFileReader(keyPath));
                     else {
                         if (((RepeatIEncryption) encAlg).getEncAlg().getClass() == ShiftUpIEncryption.class || ((RepeatIEncryption) encAlg).getEncAlg().getClass() == ShiftMultiplyIEncryption.class)
-                            return checkRangeRepeat(encAlg, simpleKeyFileReader(keyPath));
+                            return checkRangeRepeat(encAlg, (T)simpleKeyFileReader(keyPath));
                     }
                 }
             }
@@ -130,21 +129,21 @@ public class KeyHelper {
         return false;
     }
 
-    public static boolean checkRangeShiftUp(SimpleIKey key) {
+    public static boolean checkRangeShiftUp(SimpleIKey<Integer> key) {
         if (isDigitInRange(key.getKey(), 0, 32767))
             return true;
         else
             return false;
     }
 
-    public static boolean checkRangeShiftMultiply(SimpleIKey key) {
+    public static boolean checkRangeShiftMultiply(SimpleIKey<Integer> key) {
         if (isDigitInRange(key.getKey(), 0, 255))
             return true;
         else
             return false;
     }
 
-    public static boolean checkRangeDouble(IEncryptionAlgorithm encAlg, ComplexIKey keys) {
+    public static <T> boolean checkRangeDouble(IEncryptionAlgorithm<T> encAlg, ComplexIKey<SimpleIKey<Integer>> keys) {
         if ((((DoubleIEncryption) encAlg).getEncAlg1().getClass() == ShiftUpIEncryption.class) && (((DoubleIEncryption) encAlg).getEncAlg2().getClass() == ShiftMultiplyIEncryption.class)) {
             if (checkRangeShiftUp(keys.getFirst()) && checkRangeShiftMultiply(keys.getSecond()))
                 return true;
@@ -167,16 +166,16 @@ public class KeyHelper {
         return false;
     }
 
-    public static boolean checkRangeRepeat(IEncryptionAlgorithm encAlg, IKey key) {
+    public static <T> boolean checkRangeRepeat(IEncryptionAlgorithm<T> encAlg, T key) {
         if (encAlg.getClass().equals(RepeatIEncryption.class)) {
-            if (((RepeatIEncryption) encAlg).getEncAlg().getClass() == DoubleIEncryption.class) {
-                return checkRangeDouble(((RepeatIEncryption) encAlg).getEncAlg(), (ComplexIKey) key);
+            if (((RepeatIEncryption<T>) encAlg).getEncAlg().getClass() == DoubleIEncryption.class) {
+                return checkRangeDouble(((RepeatIEncryption<T>) encAlg).getEncAlg(), (ComplexIKey<SimpleIKey<Integer>>) key);
             } else {
-                if (((RepeatIEncryption) encAlg).getEncAlg().getClass() == ShiftMultiplyIEncryption.class) {
-                    return checkRangeShiftMultiply((SimpleIKey) key);
+                if (((RepeatIEncryption<T>) encAlg).getEncAlg().getClass() == ShiftMultiplyIEncryption.class) {
+                    return checkRangeShiftMultiply((SimpleIKey<Integer>) key);
                 } else {
-                    if (((RepeatIEncryption) encAlg).getEncAlg().getClass() == ShiftUpIEncryption.class)
-                        return checkRangeShiftUp((SimpleIKey) key);
+                    if (((RepeatIEncryption<T>) encAlg).getEncAlg().getClass() == ShiftUpIEncryption.class)
+                        return checkRangeShiftUp((SimpleIKey<Integer>) key);
                 }
             }
         }

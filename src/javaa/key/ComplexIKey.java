@@ -1,50 +1,51 @@
 package javaa.key;
 
 import java.util.Arrays;
+import java.util.Objects;
 
-public class ComplexIKey implements IKey {
-    IKey[] complexIKey = new IKey[2];
+public class ComplexIKey<T> {
+    protected T firstComplex;
+    protected T secondComplex;
+
 
     public ComplexIKey() {
-        this.complexIKey[0] = new SimpleIKey(0);
-        this.complexIKey[1] = new SimpleIKey(0);
+        this.firstComplex = null;
+        this.secondComplex = null;
     }
 
-    public ComplexIKey(IKey a, IKey b) {
-        this.complexIKey[0] = a;
-        this.complexIKey[1] = b;
+    public ComplexIKey(T firstComplex, T secondComplex) {
+        this.firstComplex = firstComplex;
+        this.secondComplex = secondComplex;
     }
 
-    public IKey[] getComplex() {
-        return complexIKey;
-    }
-    public SimpleIKey getFirst(){
-        return (SimpleIKey) this.complexIKey[0];
-    }
-    public SimpleIKey getSecond(){
-        return (SimpleIKey) this.complexIKey[1];
+    public T getFirst() {
+        return this.firstComplex;
     }
 
-    public void setComplex(IKey firstIKey, IKey secondIKey) {
-        this.complexIKey[0] = firstIKey;
-        this.complexIKey[1] = secondIKey;
+    public T getSecond() {
+        return this.secondComplex;
     }
 
-    @Override
-    public String toString() {
-        return Arrays.toString(complexIKey) + "";
+    public void setComplex(T firstIKey, T secondIKey) {
+        this.firstComplex = firstIKey;
+        this.secondComplex = secondIKey;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ComplexIKey that = (ComplexIKey) o;
-        return Arrays.equals(complexIKey, that.complexIKey);
+        ComplexIKey<?> that = (ComplexIKey<?>) o;
+        return Objects.equals(firstComplex, that.firstComplex) && Objects.equals(secondComplex, that.secondComplex);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(complexIKey);
+        return Objects.hash(firstComplex, secondComplex);
+    }
+
+    @Override
+    public String toString() {
+        return "[" + firstComplex+"," + secondComplex+"]";
     }
 }

@@ -3,47 +3,48 @@ package javaa.typesOfEncryption;
 import javaa.comperator.IEncryptionAlgorithmComparator;
 import javaa.key.ComplexIKey;
 import javaa.key.IKey;
+import javaa.key.SimpleIKey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class DoubleIEncryption implements IEncryptionAlgorithm {
-    private final IEncryptionAlgorithm encAlg1;
-    private final IEncryptionAlgorithm encAlg2;
+public class DoubleIEncryption implements IEncryptionAlgorithm<ComplexIKey<SimpleIKey<Integer>>> {
+    private final IEncryptionAlgorithm<SimpleIKey<Integer>> encAlg1;
+    private final IEncryptionAlgorithm<SimpleIKey<Integer>> encAlg2;
     static final int FIRST = 0;
     static final int SECOND = 1;
 
     private final ComplexIKey key = new ComplexIKey();
     private static final Logger logger = LogManager.getLogger(DoubleIEncryption.class);
 
-
-    public IEncryptionAlgorithm getEncAlg1() {
+    public IEncryptionAlgorithm<SimpleIKey<Integer>> getEncAlg1() {
         return encAlg1;
     }
 
-    public IEncryptionAlgorithm getEncAlg2() {
+    public IEncryptionAlgorithm<SimpleIKey<Integer>> getEncAlg2() {
         return encAlg2;
     }
 
-    public DoubleIEncryption(IEncryptionAlgorithm encAlg1, IEncryptionAlgorithm encAlg2) {
+    public DoubleIEncryption(IEncryptionAlgorithm<SimpleIKey<Integer>> encAlg1, IEncryptionAlgorithm<SimpleIKey<Integer>> encAlg2) {
         this.encAlg1 = encAlg1;
         this.encAlg2 = encAlg2;
     }
 
     @Override
-    public byte[] dataEncryption(byte[] filedata, int byteRead, IKey key) {
-        return doEncryptionOrDecryption(filedata, byteRead, key, true);
+    public byte[] dataEncryption(byte[] fileData, int byteRead, ComplexIKey<SimpleIKey<Integer>> key) {
+        return doEncryptionOrDecryption(fileData, byteRead, key, true);
     }
 
     @Override
-    public byte[] dataDecryption(byte[] filedata, int byteRead, IKey key) {
-        return doEncryptionOrDecryption(filedata, byteRead, key, false);
+    public byte[] dataDecryption(byte[] fileData, int byteRead, ComplexIKey<SimpleIKey<Integer>> key) {
+        return doEncryptionOrDecryption(fileData, byteRead, key, false);
     }
 
     @Override
-    public IKey generateKey() {
+    public ComplexIKey<SimpleIKey<Integer>> generateKey() {
         logger.info("DoubleEncryption Generating Key");
-        this.key.setComplex(encAlg1.generateKey(), encAlg2.generateKey());
-        return new ComplexIKey(this.key.getComplex()[0], this.key.getComplex()[1]);
+        SimpleIKey<Integer> firstKey = encAlg1.generateKey();
+        SimpleIKey<Integer> secondKey = encAlg2.generateKey();
+        return new ComplexIKey<>(firstKey,secondKey);
     }
 
     @Override
@@ -52,12 +53,11 @@ public class DoubleIEncryption implements IEncryptionAlgorithm {
         return comparator.compare(encAlg1,encAlg2);
     }
 
-    public byte[] doEncryptionOrDecryption(byte[] filedata, int byteRead, IKey key, boolean isEncryption) {
-        IKey[] IKeys = ((ComplexIKey) key).getComplex();
+    public byte[] doEncryptionOrDecryption(byte[] fileData, int byteRead, ComplexIKey<SimpleIKey<Integer>> key, boolean isEncryption) {
         if (isEncryption) {
-            return encAlg2.dataEncryption(encAlg1.dataEncryption(filedata, byteRead, IKeys[FIRST]), byteRead, IKeys[SECOND]);
+            return encAlg2.dataEncryption(encAlg1.dataEncryption(fileData, byteRead,key.getFirst()), byteRead, key.getSecond());
         } else {
-            return encAlg1.dataDecryption(encAlg2.dataDecryption(filedata, byteRead, IKeys[SECOND]), byteRead, IKeys[FIRST]);
+            return encAlg1.dataDecryption(encAlg2.dataDecryption(fileData, byteRead, key.getSecond()), byteRead, key.getFirst());
         }
     }
 }

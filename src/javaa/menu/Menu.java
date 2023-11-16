@@ -18,10 +18,9 @@ public class Menu {
     public static void StartMenu() {
         logger.info("Menu Starting");
         char choiceEncryption = HelpFunctions.UserInputChoice();
-        String filePath;
         char chooseTypeOfEncryption = HelpFunctions.UserInputTypeOfEncryption();
         FileEncryptor fileEncryptor = new FileEncryptor(HelpFunctions.TypeOfEncryption(chooseTypeOfEncryption));
-        filePath = HelpFunctions.userInputFilePath();
+        String filePath = HelpFunctions.userInputFilePath();
         switch (choiceEncryption) {
             case ENCRYPTION -> {
                 try {
