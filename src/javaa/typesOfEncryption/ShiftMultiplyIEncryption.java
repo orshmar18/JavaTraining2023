@@ -47,6 +47,9 @@ public class ShiftMultiplyIEncryption implements IEncryptionAlgorithm<SimpleIKey
 
     public byte[] doEncryptionOrDecryption(byte[] filedata, int byteRead, SimpleIKey<Integer> key, boolean isEncryption) {
         byte[] bytesArrayPut = new byte[byteRead];
+        if (byteRead % 2 != 0) {
+            bytesArrayPut = new byte[byteRead + 1];
+        }
         for (int i = 0; i < byteRead; i += 2) {
             short value = (short) ((filedata[i] << 8) | (filedata[i + 1] & 0xFF));
             if (isEncryption) {

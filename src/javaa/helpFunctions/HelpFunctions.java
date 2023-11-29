@@ -3,8 +3,9 @@ package javaa.helpFunctions;
 import javaa.typesOfEncryption.*;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Scanner;
 
 public class HelpFunctions {
@@ -160,4 +161,57 @@ public class HelpFunctions {
         Path filePath = Paths.get(path);
         return filePath.toFile().exists();
     }
+
+public static boolean checksIfPathIsFileOrDirectory(String filePath){
+        Path path = Paths.get(filePath);
+        if(Files.isDirectory(path))
+            return true;
+        else {
+            if(Files.isRegularFile(path))
+                return false;
+        }
+        return false;
+    }
+
+    public static Path duplicateDirectory(Path originalDirectoryPath,String addToPath){
+        Path duplicateDirectory = Paths.get(originalDirectoryPath+addToPath);
+        try {
+            if (Files.exists(duplicateDirectory)) {
+                // If it exists, delete its contents
+                Files.walkFileTree(duplicateDirectory, new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                        Files.delete(file);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                        Files.delete(dir);
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
+            }
+
+            // Copy the source directory to the destination directory
+            Files.walkFileTree(originalDirectoryPath, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    Path targetDir = duplicateDirectory.resolve(originalDirectoryPath.relativize(dir));
+                    Files.copy(dir, targetDir, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Files.copy(file, duplicateDirectory.resolve(originalDirectoryPath.relativize(file)), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        }catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return duplicateDirectory;
+    }
+
 }

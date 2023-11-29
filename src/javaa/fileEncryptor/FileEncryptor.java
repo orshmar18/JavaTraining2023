@@ -27,7 +27,7 @@ public class FileEncryptor<T> {
         validateFilePath(originalFilePath);
         T key = encryptionAlgorithm.generateKey();
         String path = HelpFunctions.removeFileExtension(originalFilePath);
-        File keyFile = KeyHelper.keyFileCreator(path, key);
+        File keyFile = KeyHelper.keyFileCreator(path+"_", key);
         String fileEncryptedPath = path + "_encrypted.txt";
         doEncryptOrDecrypt(originalFilePath, fileEncryptedPath, key, true);
         System.out.println("The Encrypted Message Is At : " + fileEncryptedPath);

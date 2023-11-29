@@ -76,11 +76,11 @@ public class KeyHelper {
     }
 
 
-    public static <T> File keyFileCreator(String path, T IKey) {
-        String fileKeyName = path + "_key.txt";
+    public static <T> File keyFileCreator(String path, T key) {
+        String fileKeyName = path + "key.txt";
         File keyFile = new File(fileKeyName);
         try (BufferedWriter keyWriter = new BufferedWriter(new FileWriter(keyFile))) {
-            keyWriter.write(IKey.toString());
+            keyWriter.write(key.toString());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
