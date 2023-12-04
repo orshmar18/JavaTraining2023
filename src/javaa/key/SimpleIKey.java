@@ -1,6 +1,6 @@
 package javaa.key;
 
-public class SimpleIKey<T>{
+public class SimpleIKey<T> implements IKey{
     protected T key;
 
     public SimpleIKey(T key) {

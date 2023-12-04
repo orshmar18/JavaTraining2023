@@ -3,7 +3,7 @@ package javaa.key;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class ComplexIKey<T> {
+public class ComplexIKey<T> implements IKey{
     protected T firstComplex;
     protected T secondComplex;
 

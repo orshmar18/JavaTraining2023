@@ -3,7 +3,9 @@ package javaa.directoryProcessor;
 import javaa.exception.FileNotExistsException;
 import javaa.exception.InvalidEncryptionKeyException;
 import javaa.exception.InvalidFilePathException;
+import javaa.fileEncryptor.FileEncryptor;
 import javaa.helpFunctions.HelpFunctions;
+import javaa.key.IKey;
 import javaa.key.KeyHelper;
 import javaa.typesOfEncryption.IEncryptionAlgorithm;
 import org.apache.logging.log4j.LogManager;
@@ -16,15 +18,16 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class DirectoryProcessor<T> {
-    private static final Logger logger = LogManager.getLogger(DirectoryProcessor.class);
+public abstract class DirectoryProcessor<T extends IKey> {
+    private static final Logger LOGGER = LogManager.getLogger(DirectoryProcessor.class);
 
-    static final int BUFFER = 500;
-
+    static final int BUFFER = 8000;
+    protected final FileEncryptor<T> fileEncryptor;
     private final IEncryptionAlgorithm<T> encryptionAlgorithm;
 
     public DirectoryProcessor(IEncryptionAlgorithm<T> encryptionAlgorithm) {
         this.encryptionAlgorithm = encryptionAlgorithm;
+        this.fileEncryptor = new FileEncryptor<>(encryptionAlgorithm);
     }
 
     public void encryptDirectory(String originalDirectoryPathString) throws InvalidFilePathException, FileNotExistsException, IOException {
@@ -40,10 +43,11 @@ public abstract class DirectoryProcessor<T> {
         directoryProcess(filePathArray, filePathEncArray, key, true);
     }
 
-    public void decryptDirectory(String encryptedDirectoryPathString, String keyPath) throws InvalidEncryptionKeyException,InvalidFilePathException, FileNotExistsException, IOException {
+    public void decryptDirectory(String encryptedDirectoryPathString, String keyPath) throws InvalidEncryptionKeyException, InvalidFilePathException, FileNotExistsException, IOException {
         Path encryptedDirectoryPath = Paths.get(encryptedDirectoryPathString);
         Path decryptedDirectoryPath = HelpFunctions.duplicateDirectory(encryptedDirectoryPath, "_decrypted");
         T key = KeyHelper.keyFileReaderByType(encryptionAlgorithm, keyPath);
+
         List<String> filePathsEnc = Files.walk(encryptedDirectoryPath).filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList());
         String[] filePathArray = filePathsEnc.toArray(new String[0]);
         List<String> filePathsDec = Files.walk(decryptedDirectoryPath).filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList());
@@ -51,12 +55,22 @@ public abstract class DirectoryProcessor<T> {
         directoryProcess(filePathArray, filePathEncArray, key, false);
     }
 
-    public void directoryProcess(String[] fileToReadPath, String[] fileToWriteInPath, T key, boolean isEncryption) {
-        for (int i = 0; i < fileToReadPath.length; i++) {
-            doEncryptOrDecrypt(fileToReadPath[i], fileToWriteInPath[i], key, isEncryption);
-        }
+    public void directoryEncryptionOrDecryptionProcess(Path first, Path second, T key, boolean isEncryption) throws IOException {
+        List<String> filePathsEnc = Files.walk(first).filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList());
+        String[] filePathArrayEnc = filePathsEnc.toArray(new String[0]);
+        List<String> filePathsDec = Files.walk(second).filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList());
+        String[] filePathArrayDec = filePathsDec.toArray(new String[0]);
+        long startTime = System.currentTimeMillis();
+        directoryProcess(filePathArrayEnc, filePathArrayDec, key, isEncryption);
+        long currentTime = System.currentTimeMillis() - startTime;
+        if (isEncryption)
+            LOGGER.info("The encryption of the directory took " + currentTime + " milliseconds");
+        else
+            LOGGER.info("The decryption of the directory took " + currentTime + " milliseconds");
+
     }
 
+    public abstract void directoryProcess(String[] fileToReadPath, String[] fileToWriteInPath, T key, boolean isEncryption);
 
     public void doEncryptOrDecrypt(String filePathToRead, String filePathToWrite, T key, boolean isEncryption) {
         try (FileInputStream fileInputStream = new FileInputStream(filePathToRead);
@@ -75,7 +89,7 @@ public abstract class DirectoryProcessor<T> {
                 dataOutputStream.write(bytesToWrite);
             }
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
             System.out.println(e.getMessage());
         }
     }

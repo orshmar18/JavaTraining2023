@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 
 
-public class FileEncryptor<T> {
+public class FileEncryptor<T extends IKey> {
     static final int BUFFER = 500;
     private final IEncryptionAlgorithm<T> encryptionAlgorithm;
     private static final Logger logger = LogManager.getLogger(FileEncryptor.class);
