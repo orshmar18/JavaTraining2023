@@ -1,5 +1,8 @@
 package javaa.helpFunctions;
 
+import javaa.EncryptionTypes.DoubleEncryptionTypes;
+import javaa.EncryptionTypes.EncryptionOrDecryption;
+import javaa.EncryptionTypes.EncryptionTypes;
 import javaa.typesOfEncryption.*;
 
 import java.io.File;
@@ -9,17 +12,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Scanner;
 
 public class HelpFunctions {
-    static final char ENCRYPTION = 'e';
-    static final char DECRYPTION = 'd';
-    static final char UPENCRYPTION = 'u';
-    static final char MULTIPLYENCRYPTION = 'm';
-    static final char DOUBLEENCRYPTION = 'd';
-    static final char REPEATENCRYPTION = 'r';
 
-    static final char UPMULTIPLY = '1';
-    static final char MULTIPLYUP = '2';
-    static final char UPUP = '3';
-    static final char MULTIPLYMULTIPLY = '4';
     static Scanner scan = new Scanner(System.in);
 
     public static String removeFileExtension(String filePath) {
@@ -44,59 +37,61 @@ public class HelpFunctions {
     public static char UserInputChoice() {
         char choice;
         System.out.println("Hello User");
-        System.out.println("Choose Between :\n" + ENCRYPTION + ".Encryption\n" + DECRYPTION + ".Decryption");
+        System.out.println("Choose Between :\n" + EncryptionOrDecryption.ENCRYPTION.getChar() + ".Encryption\n" + EncryptionOrDecryption.DECRYPTION.getChar() + ".Decryption");
         do {
             choice = scan.next().charAt(0);
-            if (choice != ENCRYPTION && choice != DECRYPTION)
-                System.out.println("You Have To Choose " + ENCRYPTION + " or " + DECRYPTION + "\nPlease Try Again");
-        } while (choice != ENCRYPTION && choice != DECRYPTION);
+            if (!EncryptionOrDecryption.contains(choice))
+                System.out.println("You Have To Choose " + EncryptionOrDecryption.ENCRYPTION.getChar() + " or " + EncryptionOrDecryption.DECRYPTION.getChar() + "\nPlease Try Again");
+        } while (!EncryptionOrDecryption.contains(choice));
         return choice;
     }
 
 
-    public static char UserInputTypeOfEncryption() {
+    public static char userInputTypeOfEncryption() {
         char choice;
-        System.out.println("Choose Between :\n" + UPENCRYPTION + ".ShiftUp\n" + MULTIPLYENCRYPTION + ".ShiftMultiply\n" + DOUBLEENCRYPTION + ".DoubleEncryption\n" + REPEATENCRYPTION + ".RepeatEncryption\n");
+        System.out.println("Choose Between :\n" + EncryptionTypes.UP_ENCRYPTION.getChar() + ".ShiftUp\n" + EncryptionTypes.MULTIPLY_ENCRYPTION.getChar() + ".ShiftMultiply\n" + EncryptionTypes.DOUBLE_ENCRYPTION.getChar() + ".DoubleEncryption\n" + EncryptionTypes.REPEAT_ENCRYPTION.getChar() + ".RepeatEncryption\n");
         do {
             choice = scan.next().charAt(0);
-            if (choice != UPENCRYPTION && choice != MULTIPLYENCRYPTION && choice != DOUBLEENCRYPTION && choice != REPEATENCRYPTION)
-                System.out.println("You Have To Choose " + UPENCRYPTION + " or " + MULTIPLYENCRYPTION + " or " + DOUBLEENCRYPTION + " or " + REPEATENCRYPTION + "\nPlease Try Again");
-        } while (choice != UPENCRYPTION && choice != MULTIPLYENCRYPTION && choice != DOUBLEENCRYPTION && choice != REPEATENCRYPTION);
+            if (!EncryptionTypes.contains(choice))
+                System.out.println("You Have To Choose " + EncryptionTypes.UP_ENCRYPTION.getChar() + " or " + EncryptionTypes.MULTIPLY_ENCRYPTION.getChar() + " or " + EncryptionTypes.DOUBLE_ENCRYPTION.getChar() + " or " + EncryptionTypes.REPEAT_ENCRYPTION.getChar() + "\nPlease Try Again");
+        } while (!EncryptionTypes.contains(choice));
         return choice;
     }
 
-    public static IEncryptionAlgorithm TypeOfEncryption(char choiceTypeOfEncryption) {
-        switch (choiceTypeOfEncryption) {
-            case UPENCRYPTION:
+    public static IEncryptionAlgorithm typeOfEncryption(char choiceTypeOfEncryption) {
+        EncryptionTypes encryptionTypes = EncryptionTypes.getByChar(choiceTypeOfEncryption);
+        switch (encryptionTypes) {
+            case UP_ENCRYPTION:
                 return new ShiftUpIEncryption();
-            case MULTIPLYENCRYPTION:
+            case MULTIPLY_ENCRYPTION:
                 return new ShiftMultiplyIEncryption();
-            case DOUBLEENCRYPTION:
+            case DOUBLE_ENCRYPTION:
                 return TypeOfDoubleEncryption();
-            case REPEATENCRYPTION:
+            case REPEAT_ENCRYPTION:
                 return TypeOfRepeatEncryption();
         }
         return null;
     }
 
     public static IEncryptionAlgorithm TypeOfDoubleEncryption() {
-        System.out.println("Choose Between :\n" + UPMULTIPLY + ".ShiftUp And Then ShiftMultiply\n" + MULTIPLYUP + ".ShiftMultiply And Then ShiftUp\n" + UPUP + ".ShiftUp And Then ShiftUp\n" + MULTIPLYMULTIPLY + ".ShiftMultiply And Then ShiftMultiply\n");
-        char doubleChoice = '0';
+        System.out.println("Choose Between :\n" + DoubleEncryptionTypes.UP_MULTIPLY_ENCRYPTION.getChar() + ".ShiftUp And Then ShiftMultiply\n" + DoubleEncryptionTypes.MULTIPLY_UP_ENCRYPTION.getChar() + ".ShiftMultiply And Then ShiftUp\n" + DoubleEncryptionTypes.UP_UP_ENCRYPTION.getChar() + ".ShiftUp And Then ShiftUp\n" + DoubleEncryptionTypes.MULTIPLY_MULTIPLY_ENCRYPTION.getChar() + ".ShiftMultiply And Then ShiftMultiply\n");
+        char doubleChoice;
         do {
             doubleChoice = scan.next().charAt(0);
-            switch (doubleChoice) {
-                case UPMULTIPLY:
+            DoubleEncryptionTypes doubleEncryptionTypes = DoubleEncryptionTypes.getByChar(doubleChoice);
+            switch (doubleEncryptionTypes) {
+                case UP_MULTIPLY_ENCRYPTION:
                     return new DoubleIEncryption(new ShiftUpIEncryption(), new ShiftMultiplyIEncryption());
-                case MULTIPLYUP:
+                case MULTIPLY_UP_ENCRYPTION:
                     return new DoubleIEncryption(new ShiftMultiplyIEncryption(), new ShiftUpIEncryption());
-                case UPUP:
+                case UP_UP_ENCRYPTION:
                     return new DoubleIEncryption(new ShiftUpIEncryption(), new ShiftUpIEncryption());
-                case MULTIPLYMULTIPLY:
+                case MULTIPLY_MULTIPLY_ENCRYPTION:
                     return new DoubleIEncryption(new ShiftMultiplyIEncryption(), new ShiftMultiplyIEncryption());
                 default:
-                    System.out.println("You Have To Choose Between :\n" + UPMULTIPLY + " or " + MULTIPLYUP + " or " + UPUP + " or " + MULTIPLYMULTIPLY);
+                    System.out.println("You Have To Choose Between :\n" + DoubleEncryptionTypes.UP_MULTIPLY_ENCRYPTION.getChar() + " or " + DoubleEncryptionTypes.MULTIPLY_UP_ENCRYPTION.getChar() + " or " + DoubleEncryptionTypes.UP_UP_ENCRYPTION.getChar() + " or " + DoubleEncryptionTypes.MULTIPLY_MULTIPLY_ENCRYPTION.getChar());
             }
-        } while (doubleChoice != UPMULTIPLY && doubleChoice != MULTIPLYUP && doubleChoice != UPUP && doubleChoice != MULTIPLYMULTIPLY);
+        } while (!DoubleEncryptionTypes.contains(doubleChoice));
         return null;
     }
 
@@ -105,20 +100,21 @@ public class HelpFunctions {
         System.out.print("Enter The Number Of Times You Want To Perform This Action : ");
         int n = scan.nextInt();
         char repeatChoice ;
-        System.out.println("Choose Action To Perform :\n" + UPENCRYPTION + ".ShiftUp\n" + MULTIPLYENCRYPTION + ".ShiftMultiply\n" + DOUBLEENCRYPTION + ".DoubleEncryption\n");
+        System.out.println("Choose Action To Perform :\n" + EncryptionTypes.UP_ENCRYPTION.getChar() + ".ShiftUp\n" + EncryptionTypes.MULTIPLY_ENCRYPTION.getChar() + ".ShiftMultiply\n" + EncryptionTypes.DOUBLE_ENCRYPTION.getChar() + ".DoubleEncryption\n");
         do {
             repeatChoice = scan.next().charAt(0);
-            switch (repeatChoice) {
-                case UPENCRYPTION:
+            EncryptionTypes encryptionTypes = EncryptionTypes.getByChar(repeatChoice);
+            switch (encryptionTypes) {
+                case UP_ENCRYPTION:
                     return new RepeatIEncryption(new ShiftUpIEncryption(), n);
-                case MULTIPLYENCRYPTION:
+                case MULTIPLY_ENCRYPTION:
                     return new RepeatIEncryption(new ShiftMultiplyIEncryption(), n);
-                case DOUBLEENCRYPTION:
+                case DOUBLE_ENCRYPTION:
                     return new RepeatIEncryption(TypeOfDoubleEncryption(), n);
                 default:
-                    System.out.println("You Have To Choose " + UPENCRYPTION + " or " + MULTIPLYENCRYPTION + " or " + DOUBLEENCRYPTION + "\nPlease Try Again");
+                    System.out.println("You Have To Choose " + EncryptionTypes.UP_ENCRYPTION.getChar() + " or " + EncryptionTypes.MULTIPLY_ENCRYPTION.getChar() + " or " + EncryptionTypes.DOUBLE_ENCRYPTION.getChar() + "\nPlease Try Again");
             }
-        } while (repeatChoice != UPENCRYPTION && repeatChoice != MULTIPLYENCRYPTION && repeatChoice != DOUBLEENCRYPTION);
+        } while (repeatChoice != EncryptionTypes.UP_ENCRYPTION.getChar() && repeatChoice != EncryptionTypes.MULTIPLY_ENCRYPTION.getChar() && repeatChoice != EncryptionTypes.DOUBLE_ENCRYPTION.getChar());
         return null;
     }
 

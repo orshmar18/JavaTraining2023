@@ -21,10 +21,10 @@ public class Menu {
     public static void StartMenu() {
         logger.info("Menu Starting");
         char choiceEncryption = HelpFunctions.UserInputChoice();
-        char chooseTypeOfEncryption = HelpFunctions.UserInputTypeOfEncryption();
+        char chooseTypeOfEncryption = HelpFunctions.userInputTypeOfEncryption();
         String filePath = HelpFunctions.userInputFilePath();
         if (!HelpFunctions.checksIfPathIsFileOrDirectory(filePath)) {
-            FileEncryptor fileEncryptor = new FileEncryptor(HelpFunctions.TypeOfEncryption(chooseTypeOfEncryption));
+            FileEncryptor fileEncryptor = new FileEncryptor(HelpFunctions.typeOfEncryption(chooseTypeOfEncryption));
             switch (choiceEncryption) {
                 case ENCRYPTION -> {
                     try {
@@ -54,7 +54,7 @@ public class Menu {
                 }
             }
         } else {
-            DirectoryProcessor<?> directoryProcessor = new AsyncDirectoryProcessor<>(HelpFunctions.TypeOfEncryption(chooseTypeOfEncryption));
+            DirectoryProcessor<?> directoryProcessor = new AsyncDirectoryProcessor<>(HelpFunctions.typeOfEncryption(chooseTypeOfEncryption));
             switch (choiceEncryption) {
                 case ENCRYPTION -> {
                     try {
