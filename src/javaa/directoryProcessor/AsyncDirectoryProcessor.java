@@ -1,6 +1,7 @@
 package javaa.directoryProcessor;
 
 import javaa.Utils.Pair;
+import javaa.fileEncryptor.ByteBufferProcessor;
 import javaa.key.IKey;
 import javaa.typesOfEncryption.IEncryptionAlgorithm;
 import org.apache.logging.log4j.LogManager;
@@ -18,12 +19,12 @@ public class AsyncDirectoryProcessor<T extends IKey> extends DirectoryProcessor<
     public AsyncDirectoryProcessor(IEncryptionAlgorithm<T> encryptionAlgorithm){super(encryptionAlgorithm);}
 
     @Override
-    public void directoryProcess(Pair[] pathsPairs, T key, boolean isEncryption) {
+    public void directoryProcess(Pair<String,String>[] pathsPairs, T key, ByteBufferProcessor<T> processorData) {
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        for(Pair pathPair : pathsPairs){
-            String readPath = (String) pathPair.getFirst();
-            String writePath =  (String) pathPair.getSecond();
-            executorService.execute(()-> fileEncryptor.doEncryptOrDecrypt(readPath,writePath,key,isEncryption));
+        for(Pair<String,String> pathPair : pathsPairs){
+            String readPath =  pathPair.getFirst();
+            String writePath =   pathPair.getSecond();
+            executorService.execute(()-> fileEncryptor.doEncryptOrDecrypt(readPath,writePath,key,processorData));
         }
         try{
             executorService.shutdown();

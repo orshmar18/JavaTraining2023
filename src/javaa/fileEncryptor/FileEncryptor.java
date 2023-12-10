@@ -29,7 +29,7 @@ public class FileEncryptor<T extends IKey> {
         String path = HelpFunctions.removeFileExtension(originalFilePath);
         File keyFile = KeyHelper.keyFileCreator(path+"_", key);
         String fileEncryptedPath = path + "_encrypted.txt";
-        doEncryptOrDecrypt(originalFilePath, fileEncryptedPath, key, true);
+        doEncryptOrDecrypt(originalFilePath, fileEncryptedPath, key, encryptionAlgorithm::dataEncryption);
         System.out.println("The Encrypted Message Is At : " + fileEncryptedPath);
         System.out.println("The Key Is At : " + keyFile.getPath());
         logger.info("Finish To Encrypt File");
@@ -43,13 +43,13 @@ public class FileEncryptor<T extends IKey> {
         String decryptedFileName = path + "_decrypted.txt";
         File decryptedFile = new File(decryptedFileName);
         T key = KeyHelper.keyFileReaderByType(encryptionAlgorithm, keyPath);
-        doEncryptOrDecrypt(encryptedFilePath, decryptedFileName, key, false);
+        doEncryptOrDecrypt(encryptedFilePath, decryptedFileName, key, encryptionAlgorithm::dataDecryption);
         System.out.println("The Decrypted Message Is At : " + decryptedFile.getPath());
         logger.info("Finish To Decrypt File");
     }
 
 
-    public void doEncryptOrDecrypt(String filePathToRead, String filePathToWrite, T key, boolean isEncryption) {
+    public void doEncryptOrDecrypt(String filePathToRead, String filePathToWrite, T key, ByteBufferProcessor<T> processorData) {
         try (FileInputStream fileInputStream = new FileInputStream(filePathToRead);
              DataInputStream dataInputStream = new DataInputStream(fileInputStream);
              FileOutputStream fileOutputStream = new FileOutputStream(filePathToWrite);
@@ -57,12 +57,7 @@ public class FileEncryptor<T extends IKey> {
             while (dataInputStream.available() > 0) {
                 byte[] fileData = new byte[BUFFER];
                 int bytesRead = dataInputStream.read(fileData, 0, BUFFER);
-                byte[] bytesToWrite;
-                if (isEncryption) {
-                    bytesToWrite = encryptionAlgorithm.dataEncryption(fileData, bytesRead, key);
-                } else {
-                    bytesToWrite = encryptionAlgorithm.dataDecryption(fileData, bytesRead, key);
-                }
+                byte[] bytesToWrite = processorData.dataProcessor(fileData,bytesRead,key);
                 dataOutputStream.write(bytesToWrite);
             }
         } catch (IOException e) {
