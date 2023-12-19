@@ -1,0 +1,14 @@
+{
+  "originalPath": "C:\\try\\or_shmaryahu.txt",
+  "encryptedPath": "C:\\try\\or_shmaryahu_encrypted.txt",
+  "keyPath": "C:\\try\\or_shmaryahu_key.txt",
+  "algorithm": {
+    "name": "DoubleEncryption",
+    "encAlg1": {
+      "name": "ShiftUpEncryption"
+    },
+    "encAlg2": {
+      "name": "ShiftMultiplyEncryption"
+    }
+  }
+}

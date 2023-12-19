@@ -1,9 +1,9 @@
-package main.java.directoryProcessor;
+package directoryProcessor;
 
-import main.java.Utils.Pair;
-import main.java.fileEncryptor.ByteBufferProcessor;
-import main.java.key.IKey;
-import main.java.typesOfEncryption.IEncryptionAlgorithm;
+import Utils.Pair;
+import fileEncryptor.ByteBufferProcessor;
+import key.IKey;
+import typesOfEncryption.IEncryptionAlgorithm;
 
 public class SyncDirectoryProcessor<T extends IKey> extends DirectoryProcessor<T> {
     public SyncDirectoryProcessor(IEncryptionAlgorithm<T> encryptionAlgorithm){super(encryptionAlgorithm);}

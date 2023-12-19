@@ -1,12 +1,13 @@
-package main.java.typesOfEncryption;
+package typesOfEncryption;
 
-import main.java.key.SimpleIKey;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import key.SimpleIKey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.SecureRandom;
 
-
+@JsonTypeName("ShiftUpEncryption")
 public class ShiftUpIEncryption implements IEncryptionAlgorithm<SimpleIKey<Integer>> {
     static final int LIMIT = 32767;
     private static final Logger logger = LogManager.getLogger(ShiftUpIEncryption.class);

@@ -1,15 +1,20 @@
-package main.java.typesOfEncryption;
+package typesOfEncryption;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+@JsonTypeName("RepeatEncryption")
 public class RepeatIEncryption<T> implements IEncryptionAlgorithm<T> {
+    @JsonProperty(value = "algorithm", required = true)
     private final IEncryptionAlgorithm<T> encAlg;
+    @JsonProperty("time")
     private final int numberOfRepeats;
     private static final Logger logger = LogManager.getLogger(RepeatIEncryption.class);
 
 
-    public RepeatIEncryption(IEncryptionAlgorithm<T> encAlg, int numberOfRepetitions) {
+    public RepeatIEncryption(@JsonProperty("algorithm") IEncryptionAlgorithm<T> encAlg, int numberOfRepetitions) {
         this.encAlg = encAlg;
         this.numberOfRepeats = numberOfRepetitions;
     }

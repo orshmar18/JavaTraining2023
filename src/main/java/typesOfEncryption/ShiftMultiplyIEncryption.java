@@ -1,12 +1,13 @@
-package main.java.typesOfEncryption;
+package typesOfEncryption;
 
-import main.java.helpFunctions.HelpFunctions;
-import main.java.key.SimpleIKey;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import helpFunctions.HelpFunctions;
+import key.SimpleIKey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.SecureRandom;
-
+@JsonTypeName("ShiftMultiplyEncryption")
 public class ShiftMultiplyIEncryption implements IEncryptionAlgorithm<SimpleIKey<Integer>> {
     static final int LIMIT = 255;
     private final SimpleIKey key = new SimpleIKey(1);

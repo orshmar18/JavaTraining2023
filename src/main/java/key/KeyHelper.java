@@ -1,12 +1,12 @@
-package main.java.key;
+package key;
 
-import main.java.exception.InvalidEncryptionKeyException;
-import main.java.menu.Menu;
-import main.java.typesOfEncryption.DoubleIEncryption;
-import main.java.typesOfEncryption.IEncryptionAlgorithm;
-import main.java.typesOfEncryption.RepeatIEncryption;
-import main.java.typesOfEncryption.ShiftUpIEncryption;
-import main.java.typesOfEncryption.ShiftMultiplyIEncryption;
+import exception.InvalidEncryptionKeyException;
+import menu.Menu;
+import typesOfEncryption.DoubleIEncryption;
+import typesOfEncryption.IEncryptionAlgorithm;
+import typesOfEncryption.RepeatIEncryption;
+import typesOfEncryption.ShiftUpIEncryption;
+import typesOfEncryption.ShiftMultiplyIEncryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

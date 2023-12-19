@@ -1,7 +1,7 @@
 package test.typesOfEncryptionTest;
 
-import main.java.key.SimpleIKey;
-import main.java.typesOfEncryption.ShiftMultiplyIEncryption;
+import key.SimpleIKey;
+import typesOfEncryption.ShiftMultiplyIEncryption;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

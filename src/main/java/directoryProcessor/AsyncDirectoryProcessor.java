@@ -1,9 +1,9 @@
-package main.java.directoryProcessor;
+package directoryProcessor;
 
-import main.java.Utils.Pair;
-import main.java.fileEncryptor.ByteBufferProcessor;
-import main.java.key.IKey;
-import main.java.typesOfEncryption.IEncryptionAlgorithm;
+import Utils.Pair;
+import fileEncryptor.ByteBufferProcessor;
+import key.IKey;
+import typesOfEncryption.IEncryptionAlgorithm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

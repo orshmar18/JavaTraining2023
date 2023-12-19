@@ -1,6 +1,6 @@
-package main.java.comperator;
+package comperator;
 
-import main.java.typesOfEncryption.IEncryptionAlgorithm;
+import typesOfEncryption.IEncryptionAlgorithm;
 
 import java.util.Comparator;
 

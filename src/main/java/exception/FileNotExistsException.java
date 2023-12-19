@@ -1,4 +1,4 @@
-package main.java.exception;
+package exception;
 
 public class FileNotExistsException extends Exception {
     public FileNotExistsException(String message) {

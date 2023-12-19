@@ -1,16 +1,19 @@
-package main.java.typesOfEncryption;
+package typesOfEncryption;
 
-import main.java.comperator.IEncryptionAlgorithmComparator;
-import main.java.key.ComplexIKey;
-import main.java.key.SimpleIKey;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import comperator.IEncryptionAlgorithmComparator;
+import key.ComplexIKey;
+import key.SimpleIKey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+@JsonTypeName("DoubleEncryption")
 public class DoubleIEncryption implements IEncryptionAlgorithm<ComplexIKey<SimpleIKey<Integer>>> {
+    @JsonProperty(value = "encAlg1", required = true)
     private final IEncryptionAlgorithm<SimpleIKey<Integer>> encAlg1;
+    @JsonProperty(value = "encAlg2", required = true)
     private final IEncryptionAlgorithm<SimpleIKey<Integer>> encAlg2;
-    static final int FIRST = 0;
-    static final int SECOND = 1;
 
     private final ComplexIKey key = new ComplexIKey();
     private static final Logger logger = LogManager.getLogger(DoubleIEncryption.class);
@@ -22,8 +25,8 @@ public class DoubleIEncryption implements IEncryptionAlgorithm<ComplexIKey<Simpl
     public IEncryptionAlgorithm<SimpleIKey<Integer>> getEncAlg2() {
         return encAlg2;
     }
-
-    public DoubleIEncryption(IEncryptionAlgorithm<SimpleIKey<Integer>> encAlg1, IEncryptionAlgorithm<SimpleIKey<Integer>> encAlg2) {
+@JsonCreator
+    public DoubleIEncryption(@JsonProperty("encAlg1") IEncryptionAlgorithm<SimpleIKey<Integer>> encAlg1,@JsonProperty("encAlg2") IEncryptionAlgorithm<SimpleIKey<Integer>> encAlg2) {
         this.encAlg1 = encAlg1;
         this.encAlg2 = encAlg2;
     }

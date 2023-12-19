@@ -1,10 +1,10 @@
 package test.fileEncryptorTest;
 
-import main.java.exception.FileNotExistsException;
-import main.java.exception.InvalidEncryptionKeyException;
-import main.java.exception.InvalidFilePathException;
-import main.java.fileEncryptor.FileEncryptor;
-import main.java.typesOfEncryption.*;
+import exception.FileNotExistsException;
+import exception.InvalidEncryptionKeyException;
+import exception.InvalidFilePathException;
+import fileEncryptor.FileEncryptor;
+import typesOfEncryption.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

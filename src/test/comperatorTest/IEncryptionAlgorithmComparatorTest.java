@@ -1,7 +1,7 @@
 package test.comperatorTest;
 
-import main.java.comperator.IEncryptionAlgorithmComparator;
-import main.java.typesOfEncryption.IEncryptionAlgorithm;
+import comperator.IEncryptionAlgorithmComparator;
+import typesOfEncryption.IEncryptionAlgorithm;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;

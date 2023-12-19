@@ -1,11 +1,11 @@
 package test.typesOfEncryptionTest;
 
-import main.java.key.ComplexIKey;
-import main.java.key.SimpleIKey;
-import main.java.typesOfEncryption.DoubleIEncryption;
-import main.java.typesOfEncryption.IEncryptionAlgorithm;
-import main.java.typesOfEncryption.ShiftMultiplyIEncryption;
-import main.java.typesOfEncryption.ShiftUpIEncryption;
+import key.ComplexIKey;
+import key.SimpleIKey;
+import typesOfEncryption.DoubleIEncryption;
+import typesOfEncryption.IEncryptionAlgorithm;
+import typesOfEncryption.ShiftMultiplyIEncryption;
+import typesOfEncryption.ShiftUpIEncryption;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

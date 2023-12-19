@@ -1,8 +1,8 @@
-package main.java;
+package main;
 
-import main.java.exception.InvalidFilePathException;
-import main.java.menu.Menu;
-import main.java.exception.FileNotExistsException;
+import exception.InvalidFilePathException;
+import menu.Menu;
+import exception.FileNotExistsException;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.

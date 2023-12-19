@@ -1,4 +1,4 @@
-package main.java.key;
+package key;
 
 public class SimpleIKey<T> implements IKey{
     protected T key;

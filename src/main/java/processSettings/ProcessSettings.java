@@ -1,7 +1,7 @@
-package main.java.processSettings;
+package processSettings;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import main.java.typesOfEncryption.IEncryptionAlgorithm;
+import typesOfEncryption.IEncryptionAlgorithm;
 
 public class ProcessSettings {
     @JsonProperty(value = "originalPath",required = true)

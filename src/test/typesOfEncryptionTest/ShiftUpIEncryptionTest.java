@@ -2,8 +2,8 @@ package test.typesOfEncryptionTest;
 
 import static org.junit.Assert.*;
 
-import main.java.key.SimpleIKey;
-import main.java.typesOfEncryption.ShiftUpIEncryption;
+import key.SimpleIKey;
+import typesOfEncryption.ShiftUpIEncryption;
 import org.junit.Test;
 
 public class ShiftUpIEncryptionTest {

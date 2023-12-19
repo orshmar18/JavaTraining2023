@@ -1,8 +1,8 @@
 package test.typesOfEncryptionTest;
 
-import main.java.key.ComplexIKey;
-import main.java.key.SimpleIKey;
-import main.java.typesOfEncryption.*;
+import key.ComplexIKey;
+import key.SimpleIKey;
+import typesOfEncryption.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

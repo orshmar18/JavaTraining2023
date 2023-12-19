@@ -1,15 +1,15 @@
-package main.java.directoryProcessor;
+package directoryProcessor;
 
-import main.java.Utils.Pair;
-import main.java.exception.FileNotExistsException;
-import main.java.exception.InvalidEncryptionKeyException;
-import main.java.exception.InvalidFilePathException;
-import main.java.fileEncryptor.ByteBufferProcessor;
-import main.java.fileEncryptor.FileEncryptor;
-import main.java.helpFunctions.HelpFunctions;
-import main.java.key.IKey;
-import main.java.key.KeyHelper;
-import main.java.typesOfEncryption.IEncryptionAlgorithm;
+import Utils.Pair;
+import exception.FileNotExistsException;
+import exception.InvalidEncryptionKeyException;
+import exception.InvalidFilePathException;
+import fileEncryptor.ByteBufferProcessor;
+import fileEncryptor.FileEncryptor;
+import helpFunctions.HelpFunctions;
+import key.IKey;
+import key.KeyHelper;
+import typesOfEncryption.IEncryptionAlgorithm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +30,7 @@ public abstract class DirectoryProcessor<T extends IKey> {
     }
 
     public void encryptDirectory(String originalDirectoryPathString) throws InvalidFilePathException, FileNotExistsException, IOException {
+       validateDirectory(originalDirectoryPathString);
         Path originalDirectoryPath = Paths.get(originalDirectoryPathString);
         T key = encryptionAlgorithm.generateKey();
         KeyHelper.keyFileCreator(originalDirectoryPath.getParent().toString() + "\\", key);
@@ -38,6 +39,8 @@ public abstract class DirectoryProcessor<T extends IKey> {
     }
 
     public void decryptDirectory(String encryptedDirectoryPathString, String keyPath) throws InvalidEncryptionKeyException, InvalidFilePathException, FileNotExistsException, IOException {
+        validateDirectory(encryptedDirectoryPathString);
+        this.fileEncryptor.validateKey(keyPath,encryptionAlgorithm);
         Path encryptedDirectoryPath = Paths.get(encryptedDirectoryPathString);
         Path decryptedDirectoryPath = HelpFunctions.duplicateDirectory(encryptedDirectoryPath, "_decrypted");
         T key = KeyHelper.keyFileReaderByType(encryptionAlgorithm, keyPath);

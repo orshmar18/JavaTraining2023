@@ -1,6 +1,6 @@
-package main.java.Enums;
+package Enums;
 
-public enum EncryptionTypes {
+public enum EEncryptionTypes {
     UP_ENCRYPTION('u'),
     MULTIPLY_ENCRYPTION('m'),
     DOUBLE_ENCRYPTION('d'),
@@ -8,12 +8,12 @@ public enum EncryptionTypes {
     NULL('N');
     private final char c;
 
-    EncryptionTypes(char c) {this.c = c;}
+    EEncryptionTypes(char c) {this.c = c;}
 
     public char getChar(){return this.c;}
 
-    public static EncryptionTypes getByChar(char c){
-        for (EncryptionTypes encryptionTypes : values()){
+    public static EEncryptionTypes getByChar(char c){
+        for (EEncryptionTypes encryptionTypes : values()){
             if(encryptionTypes.getChar() == c){
                 return encryptionTypes;
             }
@@ -22,7 +22,7 @@ public enum EncryptionTypes {
     }
 
     public static boolean contains(char type){
-        for (EncryptionTypes encryptionTypes : values()){
+        for (EEncryptionTypes encryptionTypes : values()){
             if(encryptionTypes.getChar() == type){
                 return true;
             }

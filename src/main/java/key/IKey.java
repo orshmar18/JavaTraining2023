@@ -1,4 +1,4 @@
-package main.java.key;
+package key;
 
 public interface IKey {
 }
